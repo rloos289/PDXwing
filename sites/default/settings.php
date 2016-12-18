@@ -244,7 +244,21 @@
  *   );
  * @endcode
  */
-$databases = array();
+$databases = array (
+  'default' => 
+  array (
+    'default' => 
+    array (
+      'database' => 'pdxwing',
+      'username' => 'rloos289',
+      'password' => '35^U1PzL5NN!',
+      'host' => '127.0.0.1',
+      'port' => '8889',
+      'driver' => 'mysql',
+      'prefix' => '',
+    ),
+  ),
+);
 
 /**
  * Access control for update.php script.
@@ -276,7 +290,7 @@ $update_free_access = FALSE;
  *   $drupal_hash_salt = file_get_contents('/home/example/salt.txt');
  *
  */
-$drupal_hash_salt = '';
+$drupal_hash_salt = 'PKXHs5qC4OCb2GDPHnRzjTkk-GC5yarksil9MWZ751I';
 
 /**
  * Base URL (optional).
