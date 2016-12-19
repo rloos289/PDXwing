@@ -1,0 +1,5 @@
+name = User Collection
+description = allows users to show a list of their collected ships and components
+package = custom modules
+core = 7.x
+files[] = user_collection.module
