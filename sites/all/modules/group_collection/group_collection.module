@@ -1,0 +1,15 @@
+<?php
+
+function group_collection_menu() {
+    $items['group_collection'] = array(
+        'title' => 'Group collection',
+        'page callback' => 'group_collection',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    return $items;
+}
+
+function group_collection() {
+    return "hi";
+}
