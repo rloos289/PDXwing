@@ -1,9 +1,9 @@
 name = Starwars
+engine = phptemplate
 description = A custom template based on star wars.
 core = 7.x
 
-stylesheets[all][] = CSS/style.CSS
-
-regions[user_menu] = User Menu
-regions[main_menu] = Main Menu
-regions[content] = Content
+stylesheets[all][] = css/style.css
+stylesheets[all][] = css/bootstrap.min.css
+scripts[] = js/scripts.js
+scripts[] = js/bootstrap.min.js

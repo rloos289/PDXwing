@@ -79,18 +79,7 @@
 
       <?php if ($site_name || $site_slogan): ?>
         <div id="name-and-slogan">
-          <?php if ($site_name): ?>
-            <?php if ($title): ?>
-              <div id="site-name"><strong>
-                  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><img src="<?php echo drupal_get_path('theme', 'starwars'); ?>/images/pdxwing-logo.png"></a>
-              </strong></div>
-            <?php else: /* Use h1 when the content title is empty */ ?>
-              <h1 id="site-name">
-                <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
-              </h1>
-            <?php endif; ?>
-          <?php endif; ?>
-
+           <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><img src=/sites/all/themes/custom/Starwars/images/pdxwing-logo.png></a>
           <?php if ($site_slogan): ?>
             <div id="site-slogan"><?php print $site_slogan; ?></div>
           <?php endif; ?>
@@ -108,15 +97,21 @@
       </div></div> <!-- /.section, /#navigation -->
     <?php endif; ?>
 
-    <?php if ($breadcrumb): ?>
-      <div id="breadcrumb"><?php print $breadcrumb; ?></div>
-    <?php endif; ?>
+
 
     <?php print $messages; ?>
 
     <div id="main-wrapper"><div id="main" class="clearfix">
 
-      <div id="content" class="column"><div class="section">
+
+              <?php if ($page['sidebar_first']): ?>
+                <div id="sidebar-first" class="column sidebar col-md-2"><div class="section">
+                  <?php print render($page['sidebar_first']); ?>
+                </div></div> <!-- /.section, /#sidebar-first -->
+              <?php endif; ?>
+
+
+      <div id="content" class="column col-md-8"><div class="section">
         <?php if ($page['highlighted']): ?><div id="highlighted"><?php print render($page['highlighted']); ?></div><?php endif; ?>
         <a id="main-content"></a>
         <?php print render($title_prefix); ?>
@@ -129,14 +124,8 @@
         <?php print $feed_icons; ?>
       </div></div> <!-- /.section, /#content -->
 
-      <?php if ($page['sidebar_first']): ?>
-        <div id="sidebar-first" class="column sidebar"><div class="section">
-          <?php print render($page['sidebar_first']); ?>
-        </div></div> <!-- /.section, /#sidebar-first -->
-      <?php endif; ?>
-
       <?php if ($page['sidebar_second']): ?>
-        <div id="sidebar-second" class="column sidebar"><div class="section">
+        <div id="sidebar-second" class="column sidebar col-md-2"><div class="section">
           <?php print render($page['sidebar_second']); ?>
         </div></div> <!-- /.section, /#sidebar-second -->
       <?php endif; ?>

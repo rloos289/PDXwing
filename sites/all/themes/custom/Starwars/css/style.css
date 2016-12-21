@@ -1,0 +1,22 @@
+body {
+    background-image: url(../images/background.jpg);
+    color: white;
+}
+
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: #C4D846;
+}
+
+.section {
+  color: white;
+  background-color: grey;
+  border-style: solid;
+}
