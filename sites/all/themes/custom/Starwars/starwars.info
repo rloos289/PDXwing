@@ -1,0 +1,9 @@
+name = Starwars
+description = A custom template based on star wars.
+core = 7.x
+
+stylesheets[all][] = CSS/style.CSS
+
+regions[user_menu] = User Menu
+regions[main_menu] = Main Menu
+regions[content] = Content

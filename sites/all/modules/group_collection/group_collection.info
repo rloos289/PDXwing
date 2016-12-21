@@ -1,5 +1,0 @@
-name = Group Collection
-description = Shows every ship owned by the group and who owns it
-package = custom modules
-core = 7.x
-files[] = group_collection.module
