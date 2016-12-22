@@ -1,0 +1,638 @@
+<?php
+
+/**
+ * @file
+ * Bracket module API tests.
+ */
+
+class BracketAPITest extends DrupalWebTestCase {
+
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+
+    return array(
+      'name' => t('Bracket API tests'),
+      'description' => t('Tests for the Bracket module API.'),
+      'group' => t('Bracket'),
+    );
+
+  }
+  
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+  
+    parent::setUp('bracket', 'search');
+
+    // Create and login user
+    $admin_user = $this->drupalCreateUser(array('view brackets', 'create brackets', 'edit brackets', 'edit own brackets'));
+    $this->drupalLogin($admin_user);
+  }
+
+  /**
+   * Test design functions
+   */
+  function test_bracket_api_design_tests() {
+
+    $result = bracket_api_design_list();
+    $message = t('bracket_api_design_list() - an array of designs should be returned.');
+    $this->assertTrue(is_array($result), $message);
+
+    $message = t('bracket_api_design_list() - the array of designs should contain one or more items.');
+    $this->assertTrue(count($result) > 0, $message);
+  }
+
+  /**
+   * Test bracket creation, load, update and delete functions
+   */
+  function test_bracket_api_bracket_node_tests() {
+    
+    $message = t('bracket_api_create_bracket() - trying to create a bracket with a non-existent design should fail.');
+    $this->assertFalse(bracket_api_create_bracket('dummy', 'dummy'), $message);
+   
+    $design = 'se8champ';
+    $message = t('bracket_api_design_exists() - the se8champ design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    $this->pass('Creating node');
+    
+    // create a bracket node
+    $title = 'Test Bracket API';
+    $node = bracket_api_create_bracket($title, $design);
+
+    // make sure node was created
+    $message = t('bracket_api_create_bracket() - the new bracket node should be created (node is not FALSE).');
+    $this->assertNotEqual($node, FALSE, $message);
+      
+    // load the new bracket      
+    $node2 = bracket_api_load_bracket($node->nid);
+    $message = t('bracket_api_load_bracket() - should be able to load the new bracket node.');
+    $this->assertNotEqual($node2, FALSE, $message);
+
+    $message = t('bracket_api_load_bracket() - loaded bracket title must match the new bracket node title.');
+    $this->assertEqual($node2->title, $node->title, $message);
+      
+    unset($node2);
+
+    // update the bracket    
+    $subtitle = 'Test Bracket Subtitle';
+    $node->subtitle = $subtitle;
+      
+    $comp1 = 'Test Competitor 1';
+    $node->comp[1]->name = $comp1;
+      
+    $round1 = 'Test Round 1';
+    $node->round[1]->comment = $round1;
+      
+    $match1 = 'Test Match 1';
+    $node->round[1]->match[1]->comment[1] = $match1;
+      
+    $result1 = 'Test Result 1';
+    $node->result[1]->comment = $result1;
+    
+    $this->pass('Updating node');
+
+    // save the updates
+    bracket_api_update_bracket($node);
+    // clear the node cache
+    node_load(FALSE, FALSE, TRUE);
+
+    // load the updated bracket
+    $node2 = bracket_api_load_bracket($node->nid);
+
+    // test for the presence of updates
+    $message = t('bracket_api_update_bracket() - updated bracket subtitle must match the new subtitle.');
+    $this->assertEqual($node2->subtitle, $subtitle, $message);
+    $message = t('bracket_api_update_bracket() - updated bracket competitor must match the new competitor.');
+    $this->assertEqual($node2->comp[1]->name, $comp1, $message);
+    $message = t('bracket_api_update_bracket() - updated bracket round comment must match the new round comment.');
+    $this->assertEqual($node2->round[1]->comment, $round1, $message);
+    $message = t('bracket_api_update_bracket() - updated bracket match comment must match the new match comment.');
+    $this->assertEqual($node2->round[1]->match[1]->comment[1], $match1, $message);
+    $message = t('bracket_api_update_bracket() - updated bracket result comment must match the new result comment.');
+    $this->assertEqual($node2->result[1]->comment, $result1, $message);
+    unset($node2);
+    
+    // test the bracket image
+    $img = bracket_api_image($node);
+    $message = t('bracket_api_image() - must be a valid PNG image.');
+    $this->assertEqual(substr($img, 1, 3), 'PNG', $message);
+    unset($img);
+    
+    // test the bracket pdf
+    $pdf = bracket_api_pdf($node);
+    $message = t('bracket_api_pdf() - must be a valid PDF.');
+    $this->assertEqual(substr($pdf, 0, 4), '%PDF', $message);
+    unset($pdf);
+    
+    // clear the node cache
+    node_load(FALSE, FALSE, TRUE);
+
+    // clone the bracket
+    $title = 'Cloned Bracket';
+    $node2 = bracket_api_clone_bracket($node, $title);
+    $message = t('bracket_api_clone_bracket() - cloned bracket title must match the new title.');
+    $this->assertEqual($node2->title, $title, $message);
+    $message = t('bracket_api_clone_bracket() - cloned bracket competitors must match source node.');
+    $this->assertEqual(count($node2->comp), count($node->comp), $message);
+    $message = t('bracket_api_clone_bracket() - cloned bracket rounds must match source node.');
+    $this->assertEqual(count($node2->round), count($node->round), $message);
+    $message = t('bracket_api_clone_bracket() - cloned bracket results must match source node.');
+    $this->assertEqual(count($node2->result), count($node->result), $message);
+    unset($node2);
+    
+    // export the bracket
+    $xml = bracket_api_xml_export($node, 'bracket');
+    $message = t('bracket_api_xml_export() - must be a valid XML.');
+    $this->assertEqual(substr($xml, 0, 5), '<?xml', $message);
+    
+    // clear the node cache
+    node_load(FALSE, FALSE, TRUE);
+    
+    // import the bracket
+    $node2 = bracket_api_create_bracket('Imported Bracket', $design);
+    $ret = bracket_api_xml_import($xml, $node2, 'bracket');
+    $message = t('bracket_api_xml_import() - import result must be TRUE.');
+    $this->assertTrue($ret, $message);
+    $message = t('bracket_api_xml_import() - imported bracket competitors must match source node.');
+    $this->assertEqual(count($node2->comp), count($node->comp), $message);
+    $message = t('bracket_api_xml_import() - imported bracket rounds must match source node.');
+    $this->assertEqual(count($node2->round), count($node->round), $message);
+    $message = t('bracket_api_xml_import() - imported bracket results must match source node.');
+    $this->assertEqual(count($node2->result), count($node->result), $message);
+    unset($xml);
+    unset($node2);
+
+    // delete the bracket
+    $this->pass('Deleting node');
+    bracket_api_delete_bracket($node->nid);
+    // delete the node cache - see http://api.drupal.org/api/function/node_delete/6#comment-216
+    node_load(FALSE, FALSE, TRUE);
+    
+    // attempt to load the deleted bracket
+    $node2 = bracket_api_load_bracket($node->nid);
+    $message = t('bracket_api_delete_bracket() - should not be able to load the deleted bracket.');
+    $this->assertFALSE($node2, $message);
+  }
+
+
+  /**
+   * Test competitor and seeding functions
+   */
+  function test_bracket_api_competitor_tests() {
+    
+    // create a bracket node
+    $node = bracket_api_create_bracket('Test Bracket API', 'se8champ');
+
+    // get competitor list
+    $comp = bracket_api_get_competitors($node);
+    $message = t('bracket_api_get_competitors() - the bracket must contain eight(8) competitors.');
+    $this->assertEqual(count($comp), 8, $message);
+
+    // set seed info for a competitor
+    $seedkey = 'A1T1';
+    $seeddesc = 'Area 1 - Team 1';
+    bracket_api_set_seed($node, 1, $seedkey, $seeddesc);
+    
+    $message = t('bracket_api_set_seed() - the competitor item must contain the updated seed key.');
+    $this->assertEqual($node->comp[1]->seedin, $seedkey, $message);
+    $message = t('bracket_api_set_seed() - the competitor match must contain the updated seed comment.');
+    $this->assertEqual($node->round[1]->match[1]->comp_comment[1], $seeddesc, $message);
+    
+    bracket_api_clear_competitor_seeding($node);
+    
+    // set seed 
+    $seed = array();
+    $seed[] = 'A1T1';
+    $seed[] = 'A2T4';
+    $seed[] = 'A2T2';
+    $seed[] = 'A1T3';
+    $seed[] = 'A1T2';
+    $seed[] = 'A2T3';
+    $seed[] = 'A2T1';
+    $seed[] = 'A1T4';
+    bracket_api_set_seeding($node, $seed);
+    $i = 0;
+    $ok = TRUE;
+    foreach ($node->comp as $comp) {
+      if ($comp->seedin != $seed[$i++]) {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_set_seeding() - the competitor seeding must match.');
+    $this->assertTrue($ok, $message);
+
+    // clear competitors
+    bracket_api_clear_competitor_seeding($node);
+    $ok = TRUE;
+    foreach ($node->comp as $comp) {
+      if ($comp->seedin != '') {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_clear_competitor_seeding() - the competitor seed must be empty.');
+    $this->assertTrue($ok, $message);
+
+    // set seeding and bracket comments
+    $seed = array();
+    $seed[] = array('seed' => 'A1T1', 'desc' => 'Area 1 - Team 1');
+    $seed[] = array('seed' => 'A2T4', 'desc' => 'Area 2 - Team 4');
+    $seed[] = array('seed' => 'A2T2', 'desc' => 'Area 2 - Team 2');
+    $seed[] = array('seed' => 'A1T3', 'desc' => 'Area 1 - Team 3');
+    $seed[] = array('seed' => 'A1T2', 'desc' => 'Area 1 - Team 2');
+    $seed[] = array('seed' => 'A2T3', 'desc' => 'Area 2 - Team 3');
+    $seed[] = array('seed' => 'A2T1', 'desc' => 'Area 2 - Team 1');
+    $seed[] = array('seed' => 'A1T4', 'desc' => 'Area 1 - Team 4');
+    bracket_api_set_seeding($node, $seed);
+    $i = 0;
+    $ok = TRUE;
+    foreach ($node->comp as $comp) {
+      if ($comp->seedin != $seed[$i++]['seed']) {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_set_seeding(method 2) - the competitor seeding must match.');
+    $this->assertTrue($ok, $message);
+    $i = 0;
+    $ok = TRUE;
+    foreach ($node->round[1]->match as $match) {
+      if ($match->comp_comment[1] != $seed[$i++]['desc']) {
+        $ok = FALSE;
+      }
+      if ($match->comp_comment[2] != $seed[$i++]['desc']) {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_set_seeding(method 2) - the competitor match comments must match.');
+    $this->assertTrue($ok, $message);
+    
+    // set competitors
+    $comp = array();
+    $comp[] = 'Competitor 1';
+    $comp[] = 'Competitor 2';
+    $comp[] = 'Competitor 3';
+    $comp[] = 'Competitor 4';
+    $comp[] = 'Competitor 5';
+    $comp[] = 'Competitor 6';
+    $comp[] = 'Competitor 7';
+    $comp[] = 'Competitor 8';
+    bracket_api_set_competitors($node, $comp);
+    $i = 0;
+    $ok = TRUE;
+    foreach ($node->comp as $c) {
+      if ($c->name != $comp[$i++]) {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_set_competitors() - the competitors must match.');
+    $this->assertTrue($ok, $message);
+
+    bracket_api_clear_competitors($node);
+    $ok = TRUE;
+    foreach ($node->comp as $comp) {
+      if ($comp->name != '') {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_clear_competitors() - the competitors must be cleared.');
+    $this->assertTrue($ok, $message);
+    
+    // seed competitors
+    $comp = array();
+    $comp['A1T1'] = 'Competitor 1';
+    $comp['A1T2'] = 'Competitor 2';
+    $comp['A1T3'] = 'Competitor 3';
+    $comp['A1T4'] = 'Competitor 4';
+    $comp['A2T1'] = 'Competitor 5';
+    $comp['A2T2'] = 'Competitor 6';
+    $comp['A2T3'] = 'Competitor 7';
+    $comp['A2T4'] = 'Competitor 8';
+    bracket_api_seed_competitors($node, $comp);
+    $ok = TRUE;
+    if ($node->comp[1]->name != $comp['A1T1']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[2]->name != $comp['A2T4']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[3]->name != $comp['A2T2']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[4]->name != $comp['A1T3']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[5]->name != $comp['A1T2']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[6]->name != $comp['A2T3']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[7]->name != $comp['A2T1']) {
+      $ok = FALSE;
+    }
+    if ($node->comp[8]->name != $comp['A1T4']) {
+      $ok = FALSE;
+    }
+    $message = t('bracket_api_seed_competitors() - the competitors must be seeded correctly.');
+    $this->assertTrue($ok, $message);
+    
+    // get seed index
+    $index = bracket_api_get_seed_index($node, 'A1T4');
+    $message = t('bracket_api_get_seed_index() - the competitor seed index must be eight(8).');
+    $this->assertEqual($index, 8, $message);
+
+    // locate competitor
+    $index = bracket_api_locate_competitor($node, 'Competitor 4');
+    $message = t('bracket_api_locate_competitor() - the competitor seed index must be eight(8).');
+    $this->assertEqual($index, 8, $message);
+  }
+  
+  /**
+   * Test round functions
+   */
+  function test_bracket_api_round_tests() {
+    
+    // create a bracket node
+    $node = bracket_api_create_bracket('Test Bracket API', 'se8champ');
+    
+    // get the final round
+    $round = bracket_api_get_round($node, 3);
+    $message = t('bracket_api_get_round() - the third round name must be \'Finals\'.');
+    $this->assertEqual($round['name'], 'Finals', $message);
+    
+    // get list of rounds
+    $rounds = bracket_api_get_rounds($node);
+    $message = t('bracket_api_get_rounds() - the bracket must contain three(3) rounds.');
+    $this->assertEqual(count($rounds), 3, $message);
+    $message = t('bracket_api_get_rounds() - the first round must contain four(4) matches.');
+    $this->assertEqual(count($rounds[1]['match']), 4, $message);
+    $message = t('bracket_api_get_rounds() - the second round must contain two(2) matches.');
+    $this->assertEqual(count($rounds[2]['match']), 2, $message);
+    $message = t('bracket_api_get_rounds() - the third round must contain one(1) match.');
+    $this->assertEqual(count($rounds[3]['match']), 1, $message);
+    
+    // locate final round
+    $index = bracket_api_locate_round($node, 'Finals');
+    $message = t('bracket_api_get_locate_round() - the round index must be three(3).');
+    $this->assertEqual($index, 3, $message);
+
+    $name = 'First Round';
+    bracket_api_set_round_name($node, 1, $name);
+    $message = t('bracket_api_set_round_name() - the round name must be updated.');
+    $this->assertEqual($node->round[1]->name, $name, $message);
+    
+    $comment = 'Round Two Comment';
+    bracket_api_set_round_comment($node, 2, $comment);
+    $message = t('bracket_api_set_round_comment() - the round comment must be updated.');
+    $this->assertEqual($node->round[2]->comment, $comment, $message);
+  }
+  
+  /**
+   * Test match functions
+   */
+  function test_bracket_api_match_tests() {
+    
+    // create a bracket node
+    $node = bracket_api_create_bracket('Test Bracket API', 'se8champ');
+
+    // update match comment of the first match
+    $comment = 'Match Comment';
+    bracket_api_set_match_comment($node, 1, 1, $comment);
+    $message = t('bracket_api_set_match_comment() - the match comment must be updated.');
+    $this->assertEqual($node->round[1]->match[1]->comment[1], $comment, $message);
+    
+    // update match comment of the first match
+    $comment = 'Competitor Comment';
+    bracket_api_set_match_competitor_comment($node, 1, 1, $comment);
+    $message = t('bracket_api_set_match_competitor_comment() - the match competitor comment must be updated.');
+    $this->assertEqual($node->round[1]->match[1]->comp_comment[1], $comment, $message);
+    
+    // get the first match
+    $match = bracket_api_get_match($node, 1);
+    $message = t('bracket_api_get_match() - the updated comment must match.');
+    $this->assertEqual($match['competitor'][1]['comment'], $comment, $message);
+    
+    // get list of matches
+    $matches = bracket_api_get_matches($node);
+    $message = t('bracket_api_get_matches() - the bracket must contain seven(7) matches.');
+    $this->assertEqual(count($matches), 7, $message);
+    
+    // update match home team
+    bracket_api_set_match_home_competitor($node, 1, 1);
+    $message = t('bracket_api_set_match_home_competitor() - competitor 1 must be home.');
+    $this->assertTrue($node->round[1]->match[1]->home[1], $message);
+    $message = t('bracket_api_set_match_home_competitor() - competitor 2 must not be home.');
+    $this->assertFalse($node->round[1]->match[1]->home[2], $message);
+
+    $comp = array();
+    $comp[] = 'Competitor 1';
+    $comp[] = 'Competitor 2';
+    $comp[] = 'Competitor 3';
+    $comp[] = 'Competitor 4';
+    $comp[] = 'Competitor 5';
+    $comp[] = 'Competitor 6';
+    $comp[] = 'Competitor 7';
+    $comp[] = 'Competitor 8';
+    bracket_api_set_competitors($node, $comp);
+    
+    // match winner update - match 1, competitor 1 wins (1-0)
+    bracket_api_set_match_winner($node, 1, 1, 1, 0);
+    $message = t('bracket_api_set_match_winner() - match 1, competitor 1 must be the winner.');
+    $this->assertTrue($node->round[1]->match[1]->win[1], $message);
+    $message = t('bracket_api_set_match_winner() - match 1, competitor 2 must not be the winner.');
+    $this->assertFalse($node->round[1]->match[1]->win[2], $message);
+    $message = t('bracket_api_set_match_winner() - match 1, competitor 1 score must be one(1).');
+    $this->assertEqual($node->round[1]->match[1]->score[1], 1, $message);
+    $message = t('bracket_api_set_match_winner() - match 1, competitor 2 score must be zero(0).');
+    $this->assertEqual($node->round[1]->match[1]->score[2], 0, $message);
+    $message = t('bracket_api_set_match_winner() - round 2 match 1 competitor 1 must not be zero(0).');
+    $this->assertNotEqual($node->round[2]->match[1]->compid[1], 0, $message);
+    $message = t('bracket_api_set_match_winner() - round 2 match 1 competitor 1 must be the round 1 match 1 winner - competitor 1.');
+    $this->assertEqual($node->round[2]->match[1]->compid[1], 1, $message);
+
+    // match winner update - match 2, competitor 2 wins (1-0)
+    bracket_api_set_match_winner($node, 2, 2, 1, 0);
+    $message = t('bracket_api_set_match_winner() - match 2, competitor 1 must not be the winner.');
+    $this->assertFalse($node->round[1]->match[2]->win[1], $message);
+    $message = t('bracket_api_set_match_winner() - match 2, competitor 2 must be the winner.');
+    $this->assertTrue($node->round[1]->match[2]->win[2], $message);
+    $message = t('bracket_api_set_match_winner() - match 2, competitor 1 score must be zero(0).');
+    $this->assertEqual($node->round[1]->match[2]->score[1], 0, $message);
+    $message = t('bracket_api_set_match_winner() - match 2, competitor 2 score must be one(1).');
+    $this->assertEqual($node->round[1]->match[2]->score[2], 1, $message);
+    $message = t('bracket_api_set_match_winner() - round 2 match 1 competitor 2 must not be zero(0).');
+    $this->assertNotEqual($node->round[2]->match[1]->compid[2], 0, $message);
+    $message = t('bracket_api_set_match_winner() - round 2 match 1 competitor 2 must be the round 1 match 2 winner - competitor 4.');
+    $this->assertEqual($node->round[2]->match[1]->compid[2], 4, $message);
+
+    // match winner update - match 3, competitor 1 wins (1-0)
+    bracket_api_set_match_winner($node, 3, 1, 1, 0);
+    $message = t('bracket_api_set_match_winner() - round 2 match 2 competitor 1 must be the round 1 match 3 winner - competitor 5.');
+    $this->assertEqual($node->round[2]->match[2]->compid[1], 5, $message);
+
+    // match winner update - match 4, competitor 2 wins (1-0)
+    bracket_api_set_match_winner($node, 4, 2, 1, 0);
+    $message = t('bracket_api_set_match_winner() - round 2 match 2 competitor 2 must be the round 1 match 4 winner - competitor 8.');
+    $this->assertEqual($node->round[2]->match[2]->compid[2], 8, $message);
+
+    // match winner update - match 5, competitor 1 wins (1-0)
+    bracket_api_set_match_winner($node, 5, 1, 1, 0);
+
+    // match winner update - match 6, competitor 2 wins (1-0)
+    bracket_api_set_match_winner($node, 6, 2, 1, 0);
+    
+    $message = t('bracket_api_set_match_winner() - round 3 match 1 competitor 1 must be competitor 1.');
+    $this->assertEqual($node->round[3]->match[1]->compid[1], 1, $message);
+    $message = t('bracket_api_set_match_winner() - round 3 match 1 competitor 2 must be competitor 8.');
+    $this->assertEqual($node->round[3]->match[1]->compid[2], 8, $message);
+    
+    $index = bracket_api_locate_match_competitor($node, 7, 'Competitor 1');
+    $message = t('bracket_api_locate_match_competitor() - must be competitor id 1.');
+    $this->assertEqual($index, 1, $message);
+
+    // match winner update - match 7, competitor 1 wins (1-0)
+    bracket_api_set_match_winner($node, 7, 1, 1, 0);
+
+    $message = t('bracket_api_set_match_winner() - result 1 must be competitor 1.');
+    $this->assertEqual($node->result[1]->compid, 1, $message);
+    $message = t('bracket_api_set_match_winner() - result 2 must be competitor 8.');
+    $this->assertEqual($node->result[2]->compid, 8, $message);
+
+    // match winner update - match 1, competitor 2 wins (1-0)
+    bracket_api_set_match_winner($node, 1, 2, 1, 0);
+    $message = t('bracket_api_set_match_winner() - round 2 match 1 competitor 1 must be the round 1 match 1 winner - competitor 2.');
+    $this->assertEqual($node->round[2]->match[1]->compid[1], 2, $message);
+    $message = t('bracket_api_set_match_winner() - round 3 match 1 competitor 1 must be the round 1 match 1 winner - competitor 2.');
+    $this->assertEqual($node->round[3]->match[1]->compid[1], 2, $message);
+    $message = t('bracket_api_set_match_winner() - result 1 must be competitor 2.');
+    $this->assertEqual($node->result[1]->compid, 2, $message);
+
+    // match winner update - reset match 1
+    bracket_api_set_match_winner($node, 1, 0);
+    $message = t('bracket_api_set_match_winner() - round 2 match 1 competitor 1 must be zero(0).');
+    $this->assertEqual($node->round[2]->match[1]->compid[1], 0, $message);
+    $message = t('bracket_api_set_match_winner() - round 3 match 1 competitor 1 must be zero(0).');
+    $this->assertEqual($node->round[3]->match[1]->compid[1], 0, $message);
+    $message = t('bracket_api_set_match_winner() - result 1 must be zero.');
+    $this->assertEqual($node->result[1]->compid, 0, $message);
+    
+    // clear bracket results
+    bracket_api_clear_results($node);
+    $ok = TRUE;
+    foreach ($node->round as $r) {
+      foreach ($r->match as $m) {
+        for ($i=1; $i<=2; $i++) {
+          if ($m->win[$i] || $m->score[$i] != '') {
+            $ok = FALSE;
+          }
+        }
+      }
+    }
+    foreach ($node->result as $r) {
+      if ($r->compid != 0) {
+        $ok = FALSE;
+      }
+    }
+    $message = t('bracket_api_clear_results() - the results must be cleared.');
+    $this->assertTrue($ok, $message);
+    
+    // create a DE bracket
+    $node = bracket_api_create_bracket('Test DE Bracket', 'de8champ');
+    
+    // first round results
+    bracket_api_set_match_winner($node, 1, 1);
+    bracket_api_set_match_winner($node, 2, 2);
+    bracket_api_set_match_winner($node, 3, 1);
+    bracket_api_set_match_winner($node, 4, 2);
+    // second round results
+    bracket_api_set_match_winner($node, 5, 1);
+    bracket_api_set_match_winner($node, 6, 2);
+    // first loser round results
+    bracket_api_set_match_winner($node, 10, 1);
+    bracket_api_set_match_winner($node, 11, 2);
+    // second loser round results
+    bracket_api_set_match_winner($node, 12, 1);
+    bracket_api_set_match_winner($node, 13, 2);
+    // third loser round results
+    bracket_api_set_match_winner($node, 14, 1);
+    // third round results
+    bracket_api_set_match_winner($node, 7, 1);
+    // fourth loser round results
+    bracket_api_set_match_winner($node, 15, 1);
+
+    // check results
+    $message = t('bracket_api_set_match_winner() - round 4 match 1 competitor 1 must be competitor 1.');
+    $this->assertEqual($node->round[4]->match[1]->compid[1], 1, $message);
+    $message = t('bracket_api_set_match_winner() - round 4 match 1 competitor 2 must be competitor 8.');
+    $this->assertEqual($node->round[4]->match[1]->compid[2], 8, $message);
+
+    // final round results
+    bracket_api_set_match_winner($node, 8, 1);
+    $message = t('bracket_api_set_match_winner() - result 1 must be competitor 1.');
+    $this->assertEqual($node->result[1]->compid, 1, $message);
+    $message = t('bracket_api_set_match_winner() - result 2 must be competitor 8.');
+    $this->assertEqual($node->result[2]->compid, 8, $message);
+
+    // reset final round results
+    bracket_api_set_match_winner($node, 8, 0);
+    $message = t('bracket_api_set_match_winner() - result 1 competitor must be zero(0).');
+    $this->assertEqual($node->result[1]->compid, 0, $message);
+    $message = t('bracket_api_set_match_winner() - result 2 competitor must be zero(0).');
+    $this->assertEqual($node->result[2]->compid, 0, $message);
+    
+    // final round results
+    bracket_api_set_match_winner($node, 8, 1);
+    $message = t('bracket_api_set_match_winner() - result 1 must be competitor 1.');
+    $this->assertEqual($node->result[1]->compid, 1, $message);
+    $message = t('bracket_api_set_match_winner() - result 2 must be competitor 8.');
+    $this->assertEqual($node->result[2]->compid, 8, $message);
+
+    // change winner to loser round winner
+    bracket_api_set_match_winner($node, 8, 2);
+    $message = t('bracket_api_set_match_winner() - result 1 competitor must be zero(0).');
+    $this->assertEqual($node->result[1]->compid, 0, $message);
+    $message = t('bracket_api_set_match_winner() - result 2 competitor must be zero(0).');
+    $this->assertEqual($node->result[2]->compid, 0, $message);
+    $message = t('bracket_api_set_match_winner() - round 5 match 1 competitor 1 must be competitor 8.');
+    $this->assertEqual($node->round[5]->match[1]->compid[1], 8, $message);
+    $message = t('bracket_api_set_match_winner() - round 5 match 1 competitor 2 must be competitor 1.');
+    $this->assertEqual($node->round[5]->match[1]->compid[2], 1, $message);
+
+    // final round 2 results
+    bracket_api_set_match_winner($node, 9, 1);
+    $message = t('bracket_api_set_match_winner() - result 1 must be competitor 8.');
+    $this->assertEqual($node->result[1]->compid, 8, $message);
+    $message = t('bracket_api_set_match_winner() - result 2 must be competitor 1.');
+    $this->assertEqual($node->result[2]->compid, 1, $message);
+    
+    // change match 4 results - check propagation
+    bracket_api_set_match_winner($node, 4, 1);
+    $message = t('bracket_api_set_match_winner() - result 1 must be competitor 7.');
+    $this->assertEqual($node->result[1]->compid, 7, $message);
+  }
+
+  /**
+   * Test result functions
+   */
+  function test_bracket_api_result_tests() {
+    
+    // create a bracket node
+    $node = bracket_api_create_bracket('Test Bracket API', 'se8champ');
+
+    // update result comment of the first result
+    $comment = 'The Winner';
+    bracket_api_set_result_comment($node, 1, $comment);
+    $message = t('bracket_api_set_result_comment() - the result comment must be updated.');
+    $this->assertEqual($node->result[1]->comment, $comment, $message);
+    
+    // get list of results
+    $results = bracket_api_get_results($node);
+    $message = t('bracket_api_get_results() - the bracket must contain two(2) results.');
+    $this->assertEqual(count($results), 2, $message);
+  }
+
+}
+

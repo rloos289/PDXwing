@@ -1,0 +1,10 @@
+name = se24po2lr
+description = Single Elimination 24 Competitor 2 Round Playoff Left-Right Bracket
+
+
+; Information added by Drupal.org packaging script on 2014-10-16
+version = "7.x-1.2"
+core = "7.x"
+project = "bracket"
+datestamp = "1413482022"
+

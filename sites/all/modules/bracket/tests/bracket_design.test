@@ -1,0 +1,1072 @@
+<?php
+
+/**
+ * @file
+ * Bracket module design tests.
+ */
+
+class BracketDesignTest extends DrupalWebTestCase {
+
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+
+    return array(
+      'name' => t('Bracket Design tests'),
+      'description' => t('Tests for Bracket Designs.'),
+      'group' => t('Bracket'),
+    );
+
+  }
+  
+  /**
+   * Implementation of setUp().
+   */
+  function setUp() {
+  
+    parent::setUp('bracket', 'search');
+
+    // Create and login user
+    $admin_user = $this->drupalCreateUser(array('view brackets', 'create brackets', 'edit brackets', 'edit own brackets'));
+    $this->drupalLogin($admin_user);
+  }
+
+  /**
+   * Test bracket design se2champ
+   */
+  function test_bracket_design_se2champ() {
+    
+    $this->pass('Creating SE2 bracket');
+    
+    $design = 'se2champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE2 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 2 competitors.');
+    $this->assertEqual(count($node->comp), 2, $message);
+      
+    $message = $design . t('bracket must contain 1 round.');
+    $this->assertEqual(count($node->round), 1, $message);
+
+    $message = $design . t(' bracket - round 1 must be a winner round.');
+    $this->assertFalse($node->round[1]->loser, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in the 1st round.');
+    $this->assertEqual(count($node->round[1]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design de4champ
+   */
+  function test_bracket_design_de4champ() {
+    
+    $this->pass('Creating DE4 bracket');
+    
+    $design = 'de4champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test DE4 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 4 competitors.');
+    $this->assertEqual(count($node->comp), 4, $message);
+      
+    $message = $design . t('bracket must contain 6 rounds.');
+    $this->assertEqual(count($node->round), 6, $message);
+
+    for ($i=1; $i<=4; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=5; $i<=6; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 2 matches in the 1st round.');
+    $this->assertEqual(count($node->round[1]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 2nd round.');
+    $this->assertEqual(count($node->round[2]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 3rd round (1st final).');
+    $this->assertEqual(count($node->round[3]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 4th round (2nd (if needed) final).');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in the 5rd round (1st loser round).');
+    $this->assertEqual(count($node->round[5]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 6th round (2nd loser round).');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design mde4champ
+   */
+  function test_bracket_design_mde4champ() {
+    
+    $this->pass('Creating MDE4 bracket');
+    
+    $design = 'mde4champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test MDE4 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 4 competitors.');
+    $this->assertEqual(count($node->comp), 4, $message);
+      
+    $message = $design . t(' bracket must contain 4 rounds.');
+    $this->assertEqual(count($node->round), 4, $message);
+
+    for ($i=1; $i<=2; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=3; $i<=4; $i++) {
+        $message = $design . t('bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 2 matches in the 1st round.');
+    $this->assertEqual(count($node->round[1]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 2nd round.');
+    $this->assertEqual(count($node->round[2]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 3rd round (1st loser round).');
+    $this->assertEqual(count($node->round[3]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 4th round (2nd loser round).');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 4 results.');
+    $this->assertEqual(count($node->result), 4, $message);
+
+    bracket_api_delete_bracket($node);
+  }
+
+  /**
+   * Test bracket design se4champ
+   */
+  function test_bracket_design_se4champ() {
+    
+    $this->pass('Creating SE4 bracket');
+    
+    $design = 'se4champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE4 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 4 competitors.');
+    $this->assertEqual(count($node->comp), 4, $message);
+      
+    $message = $design . t('bracket must contain 2 rounds.');
+    $this->assertEqual(count($node->round), 2, $message);
+
+    for ($i=1; $i<=2; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    $message = $design . t(' bracket must contain 2 matches in the 1st round.');
+    $this->assertEqual(count($node->round[1]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in the 2nd round.');
+    $this->assertEqual(count($node->round[2]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+    
+  /**
+   * Test bracket design de8champ
+   */
+  function test_bracket_design_de8champ() {
+    
+    $this->pass('Creating DE8 bracket');
+    
+    $design = 'de8champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test DE8 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 8 competitors.');
+    $this->assertEqual(count($node->comp), 8, $message);
+      
+    $message = $design . t('bracket must contain 9 rounds.');
+    $this->assertEqual(count($node->round), 9, $message);
+
+    for ($i=1; $i<=5; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=6; $i<=9; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 4 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 4 (1st final).');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 5 (2nd (if needed) final).');
+    $this->assertEqual(count($node->round[5]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 6 (1st loser round).');
+    $this->assertEqual(count($node->round[6]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 7 (2nd loser round).');
+    $this->assertEqual(count($node->round[7]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 8 (3rd loser round).');
+    $this->assertEqual(count($node->round[8]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 9 (4th loser round).');
+    $this->assertEqual(count($node->round[9]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design mde8champ
+   */
+  function test_bracket_design_mde8champ() {
+    
+    $this->pass('Creating MDE8 bracket');
+    
+    $design = 'mde8champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test MDE8 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 8 competitors.');
+    $this->assertEqual(count($node->comp), 8, $message);
+      
+    $message = $design . t(' bracket must contain 6 rounds.');
+    $this->assertEqual(count($node->round), 6, $message);
+
+    for ($i=1; $i<=3; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=4; $i<=6; $i++) {
+        $message = $design . t('bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 4 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 4 (1st loser round).');
+    $this->assertEqual(count($node->round[4]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 5 (2nd loser round).');
+    $this->assertEqual(count($node->round[5]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 6 (3rd loser round).');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 4 results.');
+    $this->assertEqual(count($node->result), 4, $message);
+
+    bracket_api_delete_bracket($node);
+  }
+
+  /**
+   * Test bracket design se8champ
+   */
+  function test_bracket_design_se8champ() {
+    
+    $this->pass('Creating SE8 bracket');
+    
+    $design = 'se8champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE8 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 8 competitors.');
+    $this->assertEqual(count($node->comp), 8, $message);
+      
+    $message = $design . t('bracket must contain 3 rounds.');
+    $this->assertEqual(count($node->round), 3, $message);
+
+    for ($i=1; $i<=3; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    $message = $design . t(' bracket must contain 4 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design de16champ
+   */
+  function test_bracket_design_de16champ() {
+    
+    $this->pass('Creating DE16 bracket');
+    
+    $design = 'de16champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test DE16 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 16 competitors.');
+    $this->assertEqual(count($node->comp), 16, $message);
+      
+    $message = $design . t('bracket must contain 12 rounds.');
+    $this->assertEqual(count($node->round), 12, $message);
+
+    for ($i=1; $i<=6; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=7; $i<=12; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 8 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 5 (1st final).');
+    $this->assertEqual(count($node->round[5]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 6 (2nd (if needed) final).');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 7 (1st loser round).');
+    $this->assertEqual(count($node->round[7]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 8 (2nd loser round).');
+    $this->assertEqual(count($node->round[8]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 9 (3rd loser round).');
+    $this->assertEqual(count($node->round[9]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 2 match in round 10 (4th loser round).');
+    $this->assertEqual(count($node->round[10]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 11 (5th loser round).');
+    $this->assertEqual(count($node->round[11]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 12 (6th loser round).');
+    $this->assertEqual(count($node->round[12]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design mde16champ
+   */
+  function test_bracket_design_mde16champ() {
+    
+    $this->pass('Creating MDE16 bracket');
+    
+    $design = 'mde16champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test MDE16 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 16 competitors.');
+    $this->assertEqual(count($node->comp), 16, $message);
+      
+    $message = $design . t(' bracket must contain 9 rounds.');
+    $this->assertEqual(count($node->round), 9, $message);
+
+    for ($i=1; $i<=4; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=5; $i<=9; $i++) {
+        $message = $design . t('bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 8 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 4 matches in round 5 (1st loser round).');
+    $this->assertEqual(count($node->round[5]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 4 matches in round 6 (2nd loser round).');
+    $this->assertEqual(count($node->round[6]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 7 (3rd loser round).');
+    $this->assertEqual(count($node->round[7]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 2 match in round 8 (4th loser round).');
+    $this->assertEqual(count($node->round[8]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 9 (5th loser round).');
+    $this->assertEqual(count($node->round[9]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 4 results.');
+    $this->assertEqual(count($node->result), 4, $message);
+
+    bracket_api_delete_bracket($node);
+  }
+
+  /**
+   * Test bracket design se16champ
+   */
+  function test_bracket_design_se16champ() {
+    
+    $this->pass('Creating SE16 bracket');
+    
+    $design = 'se16champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE16 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 16 competitors.');
+    $this->assertEqual(count($node->comp), 16, $message);
+      
+    $message = $design . t('bracket must contain 4 rounds.');
+    $this->assertEqual(count($node->round), 4, $message);
+
+    for ($i=1; $i<=4; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    $message = $design . t(' bracket must contain 8 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 2.');
+    $this->assertEqual(count($node->round[3]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 3.');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+  
+  /**
+   * Test bracket design se16champlr
+   */
+  function test_bracket_design_se16champlr() {
+    
+    $this->pass('Creating SE16 left-right bracket');
+    
+    $design = 'se16champlr';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE16 left-right Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 16 competitors.');
+    $this->assertEqual(count($node->comp), 16, $message);
+      
+    $message = $design . t('bracket must contain 4 rounds.');
+    $this->assertEqual(count($node->round), 4, $message);
+
+    for ($i=1; $i<=4; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    $message = $design . t(' bracket must contain 8 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 2.');
+    $this->assertEqual(count($node->round[3]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 3.');
+    $this->assertEqual(count($node->round[4]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+  
+  /**
+   * Test bracket design de32champ
+   */
+  function test_bracket_design_de32champ() {
+    
+    $this->pass('Creating DE32 bracket');
+    
+    $design = 'de32champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test DE32 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 32 competitors.');
+    $this->assertEqual(count($node->comp), 32, $message);
+      
+    $message = $design . t('bracket must contain 15 rounds.');
+    $this->assertEqual(count($node->round), 15, $message);
+
+    for ($i=1; $i<=7; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=8; $i<=15; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 16 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 16, $message);
+
+    $message = $design . t(' bracket must contain 8 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 5.');
+    $this->assertEqual(count($node->round[5]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 6 (1st final).');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 7 (2nd (if needed) final).');
+    $this->assertEqual(count($node->round[7]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 8 (1st loser round).');
+    $this->assertEqual(count($node->round[8]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 9 (2nd loser round).');
+    $this->assertEqual(count($node->round[9]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 10 (3rd loser round).');
+    $this->assertEqual(count($node->round[10]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 11 (4th loser round).');
+    $this->assertEqual(count($node->round[11]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 12 (5th loser round).');
+    $this->assertEqual(count($node->round[12]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 2 match in round 13 (6th loser round).');
+    $this->assertEqual(count($node->round[13]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 14 (7th loser round).');
+    $this->assertEqual(count($node->round[14]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 15 (8th loser round).');
+    $this->assertEqual(count($node->round[15]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design mde32champ
+   */
+  function test_bracket_design_mde32champ() {
+    
+    $this->pass('Creating MDE32 bracket');
+    
+    $design = 'mde32champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test MDE32 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 32 competitors.');
+    $this->assertEqual(count($node->comp), 32, $message);
+      
+    $message = $design . t(' bracket must contain 12 rounds.');
+    $this->assertEqual(count($node->round), 12, $message);
+
+    for ($i=1; $i<=5; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=6; $i<=12; $i++) {
+        $message = $design . t('bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 16 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 5.');
+    $this->assertEqual(count($node->round[5]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 8 matches in round 6 (1st loser round).');
+    $this->assertEqual(count($node->round[6]->match), 8, $message);
+      
+    $message = $design . t(' bracket must contain 8 matches in round 7 (2nd loser round).');
+    $this->assertEqual(count($node->round[7]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 8 (3rd loser round).');
+    $this->assertEqual(count($node->round[8]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 4 matches in round 9 (4th loser round).');
+    $this->assertEqual(count($node->round[9]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 10 (5th loser round).');
+    $this->assertEqual(count($node->round[10]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 2 match in round 11 (6th loser round).');
+    $this->assertEqual(count($node->round[11]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 12 (7th loser round).');
+    $this->assertEqual(count($node->round[12]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 4 results.');
+    $this->assertEqual(count($node->result), 4, $message);
+
+    bracket_api_delete_bracket($node);
+  }
+  
+  /**
+   * Test bracket design se32champlr
+   */
+  function test_bracket_design_se32champlr() {
+    
+    $this->pass('Creating SE32 left-right bracket');
+    
+    $design = 'se32champlr';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE32 left-right Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 32 competitors.');
+    $this->assertEqual(count($node->comp), 32, $message);
+      
+    $message = $design . t('bracket must contain 5 rounds.');
+    $this->assertEqual(count($node->round), 5, $message);
+
+    for ($i=1; $i<=5; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    $message = $design . t(' bracket must contain 16 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 5.');
+    $this->assertEqual(count($node->round[5]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+  
+  /**
+   * Test bracket design de64champ
+   */
+  function test_bracket_design_de64champ() {
+    
+    $this->pass('Creating DE64 bracket');
+    
+    $design = 'de64champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test DE64 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 64 competitors.');
+    $this->assertEqual(count($node->comp), 64, $message);
+      
+    $message = $design . t('bracket must contain 18 rounds.');
+    $this->assertEqual(count($node->round), 18, $message);
+
+    for ($i=1; $i<=8; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=9; $i<=18; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 32 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 32, $message);
+
+    $message = $design . t(' bracket must contain 16 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 16, $message);
+
+    $message = $design . t(' bracket must contain 8 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 5.');
+    $this->assertEqual(count($node->round[5]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 6.');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 7 (1st final).');
+    $this->assertEqual(count($node->round[7]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 8 (2nd (if needed) final).');
+    $this->assertEqual(count($node->round[8]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 16 matches in round 9 (1st loser round).');
+    $this->assertEqual(count($node->round[9]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 16 matches in round 10 (2nd loser round).');
+    $this->assertEqual(count($node->round[10]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 11 (3rd loser round).');
+    $this->assertEqual(count($node->round[11]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 12 (4th loser round).');
+    $this->assertEqual(count($node->round[12]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 13 (5th loser round).');
+    $this->assertEqual(count($node->round[13]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 14 (6th loser round).');
+    $this->assertEqual(count($node->round[14]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 15 (7th loser round).');
+    $this->assertEqual(count($node->round[15]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 2 match in round 16 (8th loser round).');
+    $this->assertEqual(count($node->round[16]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 17 (9th loser round).');
+    $this->assertEqual(count($node->round[17]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 18 (10th loser round).');
+    $this->assertEqual(count($node->round[18]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+    
+  /**
+   * Test bracket design mde64champ
+   */
+  function test_bracket_design_mde64champ() {
+    
+    $this->pass('Creating MDE64 bracket');
+    
+    $design = 'mde64champ';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test MDE64 Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 64 competitors.');
+    $this->assertEqual(count($node->comp), 64, $message);
+      
+    $message = $design . t(' bracket must contain 15 rounds.');
+    $this->assertEqual(count($node->round), 15, $message);
+
+    for ($i=1; $i<=6; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    for ($i=7; $i<=15; $i++) {
+        $message = $design . t('bracket - round ' . $i . ' must be a loser round.');
+        $this->assertTrue($node->round[$i]->loser, $message);
+    }
+    
+    $message = $design . t(' bracket must contain 32 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 32, $message);
+    
+    $message = $design . t(' bracket must contain 16 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 5.');
+    $this->assertEqual(count($node->round[5]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 6.');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 16 matches in round 7 (1st loser round).');
+    $this->assertEqual(count($node->round[7]->match), 16, $message);
+      
+    $message = $design . t(' bracket must contain 16 matches in round 8 (2nd loser round).');
+    $this->assertEqual(count($node->round[8]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 9 (3rd loser round).');
+    $this->assertEqual(count($node->round[9]->match), 8, $message);
+      
+    $message = $design . t(' bracket must contain 8 matches in round 10 (4th loser round).');
+    $this->assertEqual(count($node->round[10]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 11 (5th loser round).');
+    $this->assertEqual(count($node->round[11]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 4 matches in round 12 (6th loser round).');
+    $this->assertEqual(count($node->round[12]->match), 4, $message);
+    
+    $message = $design . t(' bracket must contain 2 matches in round 13 (7th loser round).');
+    $this->assertEqual(count($node->round[13]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 2 match in round 14 (8th loser round).');
+    $this->assertEqual(count($node->round[14]->match), 2, $message);
+    
+    $message = $design . t(' bracket must contain 1 match in round 15 (9th loser round).');
+    $this->assertEqual(count($node->round[15]->match), 1, $message);
+    
+    $message = $design . t(' bracket must contain 4 results.');
+    $this->assertEqual(count($node->result), 4, $message);
+
+    bracket_api_delete_bracket($node);
+  }
+  
+  /**
+   * Test bracket design se64champlr
+   */
+  function test_bracket_design_se64champlr() {
+    
+    $this->pass('Creating SE64 left-right bracket');
+    
+    $design = 'se64champlr';
+    $message = $design . t(' design must exist.');
+    $this->assertTrue(bracket_api_design_exists($design), $message);
+
+    // create a bracket
+    $title = 'Test SE64 left-right Bracket';
+    $node = bracket_api_create_bracket($title, $design);
+    
+    $this->pass('Bracket created - nid: ' . $node->nid . ', design: ' . $node->design);
+    
+    // check bracket parameters    
+    $message = $design . t(' bracket must contain 64 competitors.');
+    $this->assertEqual(count($node->comp), 64, $message);
+      
+    $message = $design . t('bracket must contain 6 rounds.');
+    $this->assertEqual(count($node->round), 6 , $message);
+
+    for ($i=1; $i<=6; $i++) {
+        $message = $design . t(' bracket - round ' . $i . ' must be a winner round.');
+        $this->assertFalse($node->round[$i]->loser, $message);
+    }
+
+    $message = $design . t(' bracket must contain 32 matches in round 1.');
+    $this->assertEqual(count($node->round[1]->match), 32, $message);
+    
+    $message = $design . t(' bracket must contain 16 matches in round 2.');
+    $this->assertEqual(count($node->round[2]->match), 16, $message);
+    
+    $message = $design . t(' bracket must contain 8 matches in round 3.');
+    $this->assertEqual(count($node->round[3]->match), 8, $message);
+    
+    $message = $design . t(' bracket must contain 4 matches in round 4.');
+    $this->assertEqual(count($node->round[4]->match), 4, $message);
+      
+    $message = $design . t(' bracket must contain 2 matches in round 5.');
+    $this->assertEqual(count($node->round[5]->match), 2, $message);
+      
+    $message = $design . t(' bracket must contain 1 match in round 6.');
+    $this->assertEqual(count($node->round[6]->match), 1, $message);
+      
+    $message = $design . t(' bracket must contain 2 results.');
+    $this->assertEqual(count($node->result), 2, $message);
+    
+    bracket_api_delete_bracket($node);
+  }
+}
+

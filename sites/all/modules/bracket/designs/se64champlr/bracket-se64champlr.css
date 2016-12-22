@@ -1,0 +1,223 @@
+/* $Id:  */
+
+/**
+ * Styling for the se64champlr bracket design
+ */
+ 
+/* Bracket - set a width so browser will scroll */
+div.bracket-block {
+  width: 1350px;
+}
+
+/* Fonts */
+div.bracket-subtitle {
+  font-size: 1.25em;
+}
+div.bracket-comments {
+  font-size: 0.8em;
+}
+div.bracket-round-comment {
+  font-size: 0.8em;
+}
+div.bracket-match-competitor {
+  font-size: 0.75em;
+}
+div.bracket-match-comment {
+  font-size: 0.6em;
+}
+div.bracket-match-competitor-comment {
+  font-size: 0.6em;
+}
+div.bracket-match-id {
+  font-size: 0.6em;
+}
+div.bracket-match-score {
+  font-size: 0.7em;
+}
+div.bracket-match-home {
+  font-size: 0.6em;
+}
+div.bracket-result {
+  font-size: 0.9em;
+}
+div.bracket-result-comment {
+  font-size: 0.9em;
+}
+
+/* Round elements */
+div.bracket-round {
+  width: 120px;
+}
+
+/* Bracket footer */
+div.bracket-footer {
+  width: 1350px;
+}
+
+/* Logo images */
+div.bracket-logo-image-block {
+  position: absolute;
+  top: 70px;
+  left: 570px;
+  width: 200px;
+  overflow: hidden;
+}
+.bracket-logo-image {
+  display: block;
+  margin: auto;
+}
+div.bracket-sponsorlogo-image-block {
+  position: absolute;
+  top: 1150px;
+  left: 570px;
+  width: 200px;
+  overflow: hidden;
+}
+.bracket-sponsorlogo-image {
+  display: block;
+  margin: auto;
+}
+
+/* Adjust position of Round 1 match comments */
+div.round-1-match-comment-block {
+  top: 25%;
+}
+
+/* Bracket comments */
+div.bracket-comments {
+  position: absolute;
+  top: 220px;
+  left: 570px;
+  width: 200px;
+}
+
+/* Defines the top of the first match in Round 1 */
+#round-1-spacer {
+  height: 10px;
+}
+/* Defines the height of each match in Round 1 */
+div.round-1-match {
+  height: 50px;  
+}
+/* Defines some space between matches in Round 1 */
+div.bracket-round-1-match-spacer {
+  height: 5px;
+}
+/* Defines the top of the first match in Round 2 */
+#round-2-spacer {
+  height: 35px;
+}
+/* Defines the height of each match in Round 2 */
+div.round-2-match {
+  height: 81px;  
+}
+/* Defines some space between matches in Round 2 */
+div.bracket-round-2-match-spacer {
+  height: 58px;
+}
+/* Defines the top of the first match in Round 3 */
+#round-3-spacer {
+  height: 78px;
+}
+/* Defines the height of each match in Round 3 */
+div.round-3-match {
+  height: 165px;  
+}
+/* Defines some space between matches in Round 3 */
+div.bracket-round-3-match-spacer {
+  height: 140px;
+}
+/* Defines the top of the first match in Round 4 */
+#round-4-spacer {
+  height: 160px;
+}
+/* Defines the height of each match in Round 4 */
+div.round-4-match {
+  height: 340px;  
+}
+/* Defines some space between matches in Round 4 */
+div.bracket-round-4-match-spacer {
+  height: 300px;
+}
+/* Defines the top of the first match in Round 5 */
+#round-5-spacer {
+  height: 330px;
+}
+/* Defines the height of each match in Round 5 */
+div.round-5-match {
+  height: 670px;  
+}
+/* Round 6 width */
+#round-6 {
+  width: 140px;
+}
+/* Defines the top of the final match */
+#round-6-spacer {
+  height: 600px;
+}
+/* Adjustments for final match */
+div.bracket-final-branch {
+  width: 120px;
+}
+#round-6-match-1-branch-2 {
+  float: right;
+}
+#round-6-match-1-competitor-1-block {
+  width: 120px;
+}
+#round-6-match-1-competitor-2-block {
+  width: 120px;
+  float: right;
+}
+#round-6-match-1-comment-block {
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  top: 10px;
+  height: 100px;
+  text-align: center;
+}
+#round-6-match-1-id {
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  top: 0px;
+  height: 30px;
+  text-align: center;
+}
+#round-6-match-1-competitor-1-comment {
+  margin-left: 0.5em;
+}
+#round-6-match-1-competitor-2-comment {
+  margin-right: 0.5em;
+}
+#round-6-match-1-competitor-1 {
+  font-size: 0.8em;
+}
+#round-6-match-1-competitor-2 {
+  font-size: 0.8em;
+}
+#round-6-match-1-competitor-1-score {
+  font-size: 0.8em;
+}
+#round-6-match-1-competitor-2-score {
+  font-size: 0.8em;
+}
+/* Defines the top of first result */
+div.bracket-results {
+  position: absolute;
+  top: 1250px;
+  left: 570px;
+  width: 200px;
+}
+/* Defines the distance between results */
+div.bracket-result-separator {
+  height: 20px;  
+}
+div.bracket-result {
+  text-align: center;
+}
+div.bracket-result-comment {
+  text-align: center;
+}
+

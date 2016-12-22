@@ -1,0 +1,185 @@
+/* $Id:  */
+
+/**
+ * Styling for the de8champ bracket design
+ */
+ 
+/* Bracket - set a width so browser will scroll bracket */
+div.bracket-block {
+  width: 900px;
+}
+
+/* Fonts */
+div.bracket-subtitle {
+  font-size: 1.25em;
+}
+div.bracket-comments {
+  font-size: 0.9em;
+}
+div.bracket-round-comment {
+  font-size: 1.0em;
+}
+div.bracket-match-competitor {
+  font-size: 1.0em;
+}
+div.bracket-match-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-competitor-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-id {
+  font-size: 0.75em;
+}
+div.bracket-match-score {
+  font-size: 0.75em;
+}
+div.bracket-match-home {
+  font-size: 0.75em;
+}
+div.bracket-result {
+  font-size: 1.0em;
+}
+div.bracket-result-comment {
+  font-size: 1.0em;
+}
+
+/* Round elements */
+div.bracket-round {
+  width: 150px;
+}
+
+/* Bracket footer */
+div.bracket-footer {
+  width: 900px;
+  padding-top: 100px;
+}
+
+/* Logo images */
+div.bracket-logo-image-block {
+  position: absolute;
+  top: 40px;
+  left: 650px;
+}
+div.bracket-sponsorlogo-image-block {
+  position: absolute;
+  top: 700px;
+  left: 350px;
+}
+
+/* Defines the top of the first match in Round 1 */
+#round-1-spacer {
+  height: 10px;
+}
+/* Defines the height of each match in Round 1 */
+div.round-1-match {
+  height: 60px;  
+}
+/* Defines some space between matches in Round 1 */
+div.bracket-round-1-match-spacer {
+  height: 10px;
+}
+/* Defines the distance between the last match in */
+/* Round 1 and the first match in the loser round */
+#round-1-loser-round-spacer {
+  height: 40px;
+}
+/* Defines the height of each match in Round 6 */
+/* first loser round */
+div.round-6-match {
+  height: 60px;  
+}
+/* Defines some space between matches in Round 6 */
+div.bracket-round-6-match-spacer {
+  height: 30px;
+}
+/* Defines the top of the first match in Round 2 */
+#round-2-spacer {
+  height: 40px;
+}
+/* Defines the height of each match in Round 2 */
+div.round-2-match {
+  height: 100px;  
+}
+/* Defines some space between matches in Round 1 */
+div.bracket-round-2-match-spacer {
+  height: 70px;
+}
+/* Defines the distance between the last match in */
+/* Round 2 and the first match in the loser round */
+#round-2-loser-round-spacer {
+  height: 40px;
+}
+/* Defines the height of each match in Round 7 */
+/* second loser round */
+div.round-7-match {
+  height: 60px;  
+}
+/* Defines some space between matches in Round 7 */
+div.bracket-round-7-match-spacer {
+  height: 30px;
+}
+/* Defines the top of the first match in Round 3 */
+#round-3-spacer {
+  height: 90px;
+}
+/* Defines the height of each match in Round 3 */
+div.round-3-match {
+  height: 200px;  
+}
+/* Defines the distance between the last match in */
+/* Round 3 and the first match in the loser round */
+#round-3-loser-round-spacer {
+  height: 120px;
+}
+/* Defines the height of each match in Round 8 */
+/* third loser round */
+div.round-8-match {
+  height: 120px;  
+}
+/* Defines the top of the first match in Round 4 */
+#round-4-spacer {
+  height: 180px;
+}
+/* Defines the distance between the top branch in */
+/* Round 4 and the match in the loser round */
+#round-9-loser-round-spacer {
+  height: 180px;
+  border-top: thin black solid;
+}
+/* Defines the height of each match in Round 9 */
+/* fourth loser round */
+div.round-9-match {
+  height: 120px;  
+}
+/* Defines the height of each match in Round 4 */
+div.round-4-match {
+  height: 250px;  
+}
+/* Defines the top of the first match in Round 4 */
+#round-5-spacer {
+  height: 300px;
+}
+/* Defines the height of each match in Round 5 */
+div.round-5-match {
+  height: 220px;  
+  border-right: thin black dashed;
+  border-bottom: thin black dashed;
+}
+/* Defines the top of first result */
+div.bracket-results {
+  position: absolute;
+  top: 700px;
+  left: 600px;
+  width: 200px;
+}
+/* Defines the distance between results */
+div.bracket-result-separator {
+  height: 20px;  
+}
+div.bracket-result {
+  text-align: center;
+}
+div.bracket-result-comment {
+  text-align: center;
+}

@@ -1,0 +1,376 @@
+<?php
+
+/**
+ * @file
+ * This module contains the functions required to install the
+ * Tournament Bracket module.
+ *
+ * @author Jim Bullington <jimb@jrbcs.com>
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function bracket_install() {
+
+  drupal_set_message(t('The bracket module was successfully installed'));
+}
+
+function bracket_schema() {
+
+  $schema['bracket'] = array(
+    'description' => 'Table for storing extra info for bracket nodes.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'node id of the bracket',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'subtitle' => array(
+        'description' => 'bracket subtitle',
+        'type' => 'varchar',  
+        'length' => 100, 
+        'not null' => TRUE
+      ),
+      'sport' => array(
+        'description' => 'bracket sport',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'division' => array(
+        'description' => 'bracket division',
+        'type' => 'varchar', 
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'season' => array(
+        'description' => 'bracket season',
+        'type' => 'varchar', 
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'brgroup' => array(
+        'description' => 'bracket group',
+        'type' => 'varchar', 
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'comments' => array(
+        'description' => 'bracket comments',
+        'type' => 'text'
+      ),
+      'footer' => array(
+        'description' => 'bracket footer',
+        'type' => 'text'
+      ),
+      'design' => array(
+        'description' => 'bracket design id',
+        'type' => 'varchar', 
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'logopath' => array(
+        'description' => 'bracket logo image path',
+        'type' => 'varchar', 
+        'length' => 100, 
+        'not null' => TRUE
+      ),
+      'sponsorlogopath' => array(
+        'description' => 'bracket sponsor logo image path',
+        'type' => 'varchar', 
+        'length' => 100, 
+        'not null' => TRUE
+      ),
+      'options' => array(
+        'description' => 'bracket advanced options',
+        'type' => 'text'
+      ),
+    ),
+    'primary key' => array('nid')
+  );
+  
+  $schema['bracket_round'] = array(
+    'fields' => array(
+      'nid' => array(
+        'description' => 'node id of the bracket',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'id' => array(
+        'description' => 'id of the round',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'round' => array(
+        'description' => 'round description',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'loser' => array(
+        'description' => 'indicates loser round',
+        'type' => 'int', 
+        'size' => 'tiny', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'first' => array(
+        'description' => 'indicates first round',
+        'type' => 'int', 
+        'size' => 'tiny', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'comment' => array(
+        'description' => 'round comment',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+    ),
+    'primary key' => array('nid', 'id')
+  );
+
+  $schema['bracket_match'] = array(
+    'fields' => array(
+      'nid' => array(
+        'description' => 'node id of the bracket',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'id' => array(
+        'description' => 'id of the match',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'roundid' => array(
+        'description' => 'round id of the match',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'compid1' => array(
+        'description' => 'match competitor 1',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'score1' => array(
+        'description' => 'competitor 1 score',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'home1' => array(
+        'description' => 'indicates competitor 1 is the home competitor',
+        'type' => 'int', 
+        'size' => 'tiny', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'win1' => array(
+        'description' => 'indicates competitor 1 is the match winner',
+        'type' => 'int', 
+        'size' => 'tiny', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'comp1_comment' => array(
+        'description' => 'competitor 1 comment',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'compid2' => array(
+        'description' => 'match competitor 2',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'score2' => array(
+        'description' => 'competitor 2 score',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'home2' => array(
+        'description' => 'indicates competitor 2 is the home competitor',
+        'type' => 'int', 
+        'size' => 'tiny', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'win2' => array(
+        'description' => 'indicates competitor 2 is the match winner',
+        'type' => 'int', 
+        'size' => 'tiny', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'comp2_comment' => array(
+        'description' => 'competitor 2 comment',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'match_comment1' => array(
+        'description' => 'match comment 1',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'match_comment2' => array(
+        'description' => 'match comment 2',
+        'type' => 'varchar',  
+        'length' => 50, 
+        'not null' => TRUE
+      ),
+      'seq' => array(
+        'description' => 'match sequence',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'winner_match' => array(
+        'description' => 'winner next match',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'winner_comp' => array(
+        'description' => 'winner next match - competitor (1 or 2)',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'loser_match' => array(
+        'description' => 'loser next match',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'loser_comp' => array(
+        'description' => 'loser next match - competitor (1 or 2)',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'winner_result' => array(
+        'description' => 'winner result (place)',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'loser_result' => array(
+        'description' => 'loser result (place)',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'win_use_result' => array(
+        'description' => 'if set, if this competitor wins (1 or 2) use result',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+    ),
+    'primary key' => array('nid', 'id')
+  );
+
+  $schema['bracket_comp'] = array(
+    'fields' => array(
+      'nid' => array(
+        'description' => 'node id of the bracket',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'id' => array(
+        'description' => 'competitor id',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'name' => array(
+        'description' => 'competitor name',
+        'type' => 'varchar',  
+        'length' => 50
+      ),
+      'seedin' => array(
+        'description' => 'competitor seed in',
+        'type' => 'varchar',  
+        'length' => 50
+      ),
+    ),
+    'primary key' => array('nid', 'id')
+  );
+
+  $schema['bracket_result'] = array(
+    'fields' => array(
+      'nid' => array(
+        'description' => 'node id of the bracket',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'id' => array(
+        'description' => 'result id',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE
+      ),
+      'compid' => array(
+        'description' => 'competitor id',
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'comment' => array(
+        'description' => 'result comment',
+        'type' => 'varchar',  
+        'length' => 50
+      ),
+      'seedout' => array(
+        'description' => 'competitor seed out',
+        'type' => 'varchar',  
+        'length' => 50
+      ),
+    ),
+    'primary key' => array('nid', 'id')
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function bracket_uninstall() {
+
+  drupal_set_message(t('The bracket module was successfully uninstalled'));
+}
+
+

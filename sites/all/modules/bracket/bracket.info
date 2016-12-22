@@ -1,0 +1,14 @@
+name = Bracket
+description = The Bracket module creates and displays tournament brackets
+core = 7.x
+files[] = bracket_class.inc
+files[] = tests/bracket_api.test
+files[] = tests/bracket_design.test
+configure = admin/config/content/bracket
+
+; Information added by Drupal.org packaging script on 2014-10-16
+version = "7.x-1.2"
+core = "7.x"
+project = "bracket"
+datestamp = "1413482022"
+

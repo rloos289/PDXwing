@@ -1,0 +1,182 @@
+/* $Id:  */
+
+/**
+ * Styling for the se16champlr bracket design
+ */
+ 
+/* Bracket - set a width so browser will scroll */
+div.bracket-block {
+  width: 900px;
+}
+
+/* Fonts */
+div.bracket-subtitle {
+  font-size: 1.25em;
+}
+div.bracket-comments {
+  font-size: 0.9em;
+}
+div.bracket-round-comment {
+  font-size: 1.0em;
+}
+div.bracket-match-competitor {
+  font-size: 0.9em;
+}
+div.bracket-match-comment {
+  font-size: 0.7em;
+}
+div.bracket-match-competitor-comment {
+  font-size: 0.8em;
+}
+div.bracket-match-id {
+  font-size: 0.7em;
+}
+div.bracket-match-score {
+  font-size: 0.8em;
+}
+div.bracket-match-home {
+  font-size: 0.7em;
+}
+div.bracket-result {
+  font-size: 0.9em;
+}
+div.bracket-result-comment {
+  font-size: 0.9em;
+}
+
+/* Round elements */
+div.bracket-round {
+  width: 120px;
+}
+
+/* Match elements */
+div.bracket-match-comment-block {
+  top: 25%;
+}
+
+/* Result elements */
+div.bracket-results {
+  width: 120px;
+}
+
+/* Bracket footer */
+div.bracket-footer {
+  width: 850px;
+  padding-top: 20px;
+}
+
+/* Logo images */
+div.bracket-logo-image-block {
+  position: absolute;
+  top: 30px;
+  left: 340px;
+  width: 180px;
+}
+.bracket-logo-image {
+  display: block;
+  margin: auto;
+}
+div.bracket-sponsorlogo-image-block {
+  position: absolute;
+  top: 380px;
+  left: 340px;
+  width: 180px;
+}
+.bracket-sponsorlogo-image {
+  display: block;
+  margin: auto;
+}
+
+/* Defines the top of the first match in Round 1 */
+#round-1-spacer {
+  height: 10px;
+}
+/* Defines the height of each match in Round 1 */
+div.round-1-match {
+  height: 80px;  
+}
+/* Defines some space between matches in Round 1 */
+div.bracket-round-1-match-spacer {
+  height: 10px;
+}
+/* Defines the top of the first match in Round 2 */
+#round-2-spacer {
+  height: 50px;
+}
+/* Defines the height of each match in Round 2 */
+div.round-2-match {
+  height: 120px;  
+}
+/* Defines some space between matches in Round 2 */
+div.bracket-round-2-match-spacer {
+  height: 90px;
+}
+/* Defines the top of the first match in Round 3 */
+#round-3-spacer {
+  height: 110px;
+}
+/* Defines the height of each match in Round 3 */
+div.round-3-match {
+  height: 240px;  
+}
+/* Round 4 width */
+#round-4 {
+  width: 140px;
+}
+/* Defines the top of the final match */
+#round-4-spacer {
+  height: 180px;
+}
+/* Adjustments for final match */
+div.bracket-final-branch {
+  width: 120px;
+}
+#round-4-match-1-branch-2 {
+  float: right;
+}
+#round-4-match-1-competitor-1-block {
+  width: 120px;
+}
+#round-4-match-1-competitor-2-block {
+  width: 120px;
+  float: right;
+}
+#round-4-match-1-comment-block {
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  top: 10px;
+  height: 50px;
+  text-align: center;
+}
+#round-4-match-1-id {
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  top: 0px;
+  height: 30px;
+  text-align: center;
+}
+#round-4-match-1-competitor-1-comment {
+  margin-left: 0.5em;
+}
+#round-4-match-1-competitor-2-comment {
+  margin-right: 0.5em;
+}
+/* Defines the top of first result */
+div.bracket-results {
+  position: absolute;
+  top: 450px;
+  left: 320px;
+  width: 200px;
+}
+/* Defines the distance between results */
+div.bracket-result-separator {
+  height: 20px;  
+}
+div.bracket-result {
+  text-align: center;
+}
+div.bracket-result-comment {
+  text-align: center;
+}

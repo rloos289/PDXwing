@@ -1,0 +1,193 @@
+
+/**
+ * @file
+ * Styles for the Bracket module.
+ *
+ */
+
+div.bracket-print-link {
+  display: block;
+  float: none;
+  clear: both;
+  margin: 0.5em;
+}
+
+/* Bracket HTML output elements */
+div.bracket-block {
+  position: relative;
+  line-height:100%;
+}
+div.bracket-subtitle {
+  font-size: 1.25em;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+div.bracket-comments {
+  font-size: 1.0em;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+/* Round elements */
+div.bracket-round {
+  position:relative;
+  width: 250px;
+  float: left;
+}
+div.bracket-round-comment {
+  font-size: 1.25em;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+/* Match elements */
+div.bracket-match-block {
+  position: relative;
+  clear: both;
+}
+div.bracket-match-block-left {
+  border-top: thin black solid;
+  border-right: thin black solid;
+  border-bottom: thin black solid;
+}
+div.bracket-match-block-right {
+  border-top: thin black solid;
+  border-left: thin black solid;
+  border-bottom: thin black solid;
+}
+div.bracket-match-competitor-block {
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
+div.bracket-match-bottom-competitor-block {
+  position: absolute;
+  bottom: 0px;
+  width: 94%;
+}
+div.bracket-match-competitor {
+  font-size: 1.25em;
+  padding-bottom: 0.1em;
+}
+div.bracket-match-competitor-left {
+  float: left;
+}
+div.bracket-match-competitor-right {
+  float: right;
+}
+div.bracket-match-competitor-comment-block {
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+  clear: both;
+}
+div.bracket-match-competitor-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-competitor-comment-left {
+  float: left;
+}
+div.bracket-match-competitor-comment-right {
+  float: right;
+}
+div.bracket-match-comment-block {
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+  clear: both;
+  position: absolute;
+  top: 40%;
+  width: 90%;
+}
+div.bracket-match-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-comment-left {
+  text-align: left;
+}
+div.bracket-match-comment-right {
+  text-align: right;
+}
+div.bracket-match-id {
+  font-size: 0.75em;
+  position: absolute;
+  top: 40%;
+}
+div.bracket-match-id-left {
+  text-align: right;
+  right: 0.5em;
+}
+div.bracket-match-id-right {
+  text-align: left;
+  left: 0.5em;
+}
+div.bracket-match-score {
+  font-size: 0.75em;
+}
+div.bracket-match-score-left {
+  text-align: right;
+}
+div.bracket-match-score-right {
+  text-align: left;
+}
+div.bracket-match-home {
+  font-size: 0.75em;
+}
+div.bracket-match-home-left {
+  text-align: right;
+}
+div.bracket-match-home-right {
+  text-align: left;
+}
+
+/* Result elements */
+div.bracket-results {
+  position: relative;
+  width: 250px;
+  float: left;
+}
+div.bracket-result-block-left {
+  float: left;
+}
+div.bracket-result-block-right {
+  float: right;
+}
+div.bracket-result-separator {
+  border-top: thin black solid;
+}
+div.bracket-result {
+  font-size: 1.25em;
+  padding-bottom: 0.1em;
+}
+div.bracket-result-left {
+  text-align: left;
+  margin-left: 0.5em;
+}
+div.bracket-result-right {
+  text-align: right;
+  margin-right: 0.5em;
+}
+div.bracket-result-comment {
+  font-size: 1.0em;
+}
+div.bracket-result-comment-left {
+  text-align: left;
+  margin-left: 0.5em;
+}
+div.bracket-result-comment-right {
+  text-align: right;
+  margin-right: 0.5em;
+}
+
+/* Special elements */
+div.bracket-final-branch {
+  border-top: thin black solid;
+}
+
+/* Footer */
+div.bracket-footer {
+  font-size: 0.75em;
+  float: none;
+  height: 20px;
+  width: 700px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}

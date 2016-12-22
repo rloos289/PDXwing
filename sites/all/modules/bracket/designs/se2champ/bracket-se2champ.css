@@ -1,0 +1,73 @@
+/* $Id:  */
+
+/**
+ * Styling for the se2champ bracket design
+ */
+
+/* Bracket - set a width so browser will scroll bracket */
+div.bracket-block {
+  width: 500px;
+}
+
+/* Fonts */
+div.bracket-subtitle {
+  font-size: 1.25em;
+}
+div.bracket-comments {
+  font-size: 1.0em;
+}
+div.bracket-round-comment {
+  font-size: 1.25em;
+}
+div.bracket-match-competitor {
+  font-size: 1.25em;
+}
+div.bracket-match-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-competitor-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-id {
+  font-size: 0.75em;
+}
+div.bracket-match-score {
+  font-size: 0.75em;
+}
+div.bracket-match-home {
+  font-size: 0.75em;
+}
+div.bracket-result {
+  font-size: 1.25em;
+}
+div.bracket-result-comment {
+  font-size: 1.0em;
+}
+
+/* Logo images */
+div.bracket-logo-image-block {
+  position: absolute;
+  top: 0px;
+  left: 600px;
+}
+div.bracket-sponsorlogo-image-block {
+  position: absolute;
+  top: 200px;
+  left: 600px;
+}
+
+/* Defines the top of the first match in Round 1 */
+#round-1-spacer {
+  height: 10px;
+}
+/* Defines the height of each match in Round 1 */
+div.round-1-match {
+  height: 100px;  
+}
+/* Defines the top of first result */
+#results-spacer {
+  height: 80px;
+}
+div.bracket-result-spacer {
+  height: 20px;
+}

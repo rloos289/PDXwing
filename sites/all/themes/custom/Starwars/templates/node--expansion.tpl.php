@@ -99,22 +99,21 @@
   <div class="content"<?php print $content_attributes; ?>>
 
     <div class='col-md-6'>
-      <?php render($content['body']);
-      render($content['field_users']);
-      render($content['field_faction']);
+      <?php
       print render($content['body']);
       print render($content['field_users']);
-      print render($content['field_faction']);?>
+      print render($content['field_faction']);
+      ?>
     </div>
 
-      <div class='col-md-6'>
-        <?php render($content['field_ship_image']);
-        print render($content['field_ship_image']); ?>
-      </div>
+    <div class='col-md-6'>
+      <?php
+      print render($content['field_ship_image']);
+      ?>
+    </div>
 
     <?php
       // We hide the comments and links now so that we can render them later.
-
       hide($content['comments']);
       hide($content['links']);
       print render($content);

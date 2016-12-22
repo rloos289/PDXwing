@@ -1,0 +1,9 @@
+
+Bracket 7.x Version Changelog
+------------------------------
+
+7.x-1.0
+--------
+- Initial version for 7.x API
+
+

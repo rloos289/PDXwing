@@ -1,0 +1,9 @@
+name = ff2champ
+description = Final Four - 2 Competitor Championship Brackets
+
+; Information added by Drupal.org packaging script on 2014-10-16
+version = "7.x-1.2"
+core = "7.x"
+project = "bracket"
+datestamp = "1413482022"
+

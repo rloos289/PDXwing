@@ -1,0 +1,8 @@
+name = mde8champ
+description = Modified Double Elimination 8 Competitor Championship Bracket
+; Information added by Drupal.org packaging script on 2014-10-16
+version = "7.x-1.2"
+core = "7.x"
+project = "bracket"
+datestamp = "1413482022"
+

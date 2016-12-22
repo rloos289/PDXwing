@@ -19,7 +19,10 @@ a:hover {
   color: white;
 }
 
-/*.content{
-  background-color: grey;
-  border-style: solid;
-}*/
+.views-css-tables-table--thead {
+  padding-bottom: 4%;
+}
+
+.event-popup simpleEventProcessed {
+  color: black;
+}

@@ -1,0 +1,134 @@
+/* $Id:  */
+
+/**
+ * Styling for the se32champlr bracket design
+ */
+ 
+/* Bracket - set a width so browser will scroll */
+div.bracket-block {
+  width: 1000px;
+}
+
+/* Fonts */
+div.bracket-subtitle {
+  font-size: 1.25em;
+}
+div.bracket-comments {
+  font-size: 0.8em;
+}
+div.bracket-round-comment {
+  font-size: 0.9em;
+}
+div.bracket-match-competitor {
+  font-size: 0.8em;
+}
+div.bracket-match-comment {
+  font-size: 0.7em;
+}
+div.bracket-match-competitor-comment {
+  font-size: 0.75em;
+}
+div.bracket-match-id {
+  font-size: 0.7em;
+}
+div.bracket-match-score {
+  font-size: 0.8em;
+}
+div.bracket-match-home {
+  font-size: 0.7em;
+}
+div.bracket-result {
+  font-size: 0.9em;
+}
+div.bracket-result-comment {
+  font-size: 0.9em;
+}
+
+/* Round elements */
+div.bracket-round {
+  width: 130px;
+}
+
+/* Result elements */
+div.bracket-results {
+  width: 130px;
+}
+
+/* Bracket comments */
+div.bracket-comments {
+  position: absolute;
+  top: 200px;
+  left: 390px;
+  width: 200px;
+}
+
+/* Bracket footer */
+div.bracket-footer {
+  width: 1000px;
+}
+
+/* Logo images */
+div.bracket-logo-image-block {
+  position: absolute;
+  top: 0px;
+  left: 390px;
+  width: 200px;
+  overflow: hidden;
+}
+.bracket-logo-image {
+  display: block;
+  margin: auto;
+}
+div.bracket-sponsorlogo-image-block {
+  position: absolute;
+  top: 600px;
+  left: 390px;
+  width: 200px;
+  overflow: hidden;
+}
+.bracket-sponsorlogo-image {
+  display: block;
+  margin: auto;
+}
+
+/* Adjust position of Round 1 match comments */
+div.round-1-match-comment-block {
+  top: 25%;
+}
+
+/* Defines the top of the first match in Round 1 */
+#round-1-spacer {
+  height: 10px;
+}
+/* Defines the height of each match in Round 1 */
+div.round-1-match {
+  height: 60px;  
+}
+/* Defines some space between matches in Round 1 */
+div.bracket-round-1-match-spacer {
+  height: 5px;
+}
+/* Defines the top of the first match in Round 2 */
+#round-2-spacer {
+  height: 40px;
+}
+/* Defines the height of each match in Round 2 */
+div.round-2-match {
+  height: 95px;  
+}
+/* Defines some space between matches in Round 2 */
+div.bracket-round-2-match-spacer {
+  height: 62px;
+}
+/* Defines start of first result */
+#results-spacer {
+  height: 100px;
+}
+/* Defines distance between results */
+div.bracket-result-separator {
+  height: 170px;  
+}
+/* Defines space between left and right brackets */
+#round-spacer {
+  width: 200px;
+}
