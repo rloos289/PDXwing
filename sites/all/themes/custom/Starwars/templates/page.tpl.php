@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Default theme implementation to display a single Drupal page.
@@ -89,7 +88,7 @@
       <?php print render($page['header']); ?>
 
     </div></div> <!-- /.section, /#header -->
-
+<!--
     <?php if ($main_menu || $secondary_menu): ?>
       <div id="navigation"><div class="section">
         <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('id' => 'main-menu', 'class' => array('links', 'inline', 'clearfix')), 'heading' => t('Main menu'))); ?>
@@ -103,6 +102,8 @@
 
     <div id="main-wrapper"><div id="main" class="clearfix">
 
+      <?php if ($page['highlighted']): ?><div id="highlighted" class='col-md-12'><?php print render($page['highlighted']); ?></div><?php endif; ?>
+
 
               <?php if ($page['sidebar_first']): ?>
                 <div id="sidebar-first" class="column sidebar col-md-2"><div class="section">
@@ -110,9 +111,7 @@
                 </div></div> <!-- /.section, /#sidebar-first -->
               <?php endif; ?>
 
-
       <div id="content" class="column col-md-8"><div class="section">
-        <?php if ($page['highlighted']): ?><div id="highlighted"><?php print render($page['highlighted']); ?></div><?php endif; ?>
         <a id="main-content"></a>
         <?php print render($title_prefix); ?>
         <?php if ($title): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
@@ -121,7 +120,6 @@
         <?php print render($page['help']); ?>
         <?php if ($action_links): ?><ul class="action-links"><?php print render($action_links); ?></ul><?php endif; ?>
         <?php print render($page['content']); ?>
-        <?php print $feed_icons; ?>
       </div></div> <!-- /.section, /#content -->
 
       <?php if ($page['sidebar_second']): ?>
