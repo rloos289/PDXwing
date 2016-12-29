@@ -30,3 +30,8 @@ a:hover {
 a.wiki-link {
   display: none;
 }
+
+.owned_by {
+  background-color: #b5afaf;
+  text-align: center;
+}

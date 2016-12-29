@@ -97,25 +97,23 @@
   <?php endif; ?>
 
   <div class="content"<?php print $content_attributes; ?>>
+    <div class="container">
+      <div class='col-md-6 owned_by'>
+        <?php
+        print render($content['field_users']);
+        ?>
+      </div>
+      <div class='col-md-6'>
+        <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a>
+      </div>
 
-    <div class='col-md-6 imgwrapper'>
       <?php
-      print render($content['body']);
-      print render($content['field_users']);
-      print render($content['field_details']);
+        // We hide the comments and links now so that we can render them later.
+        hide($content['comments']);
+        hide($content['links']);
+        print render($content);
       ?>
     </div>
-
-    <div class='col-md-6'>
-      <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a>
-    </div>
-
-    <?php
-      // We hide the comments and links now so that we can render them later.
-      hide($content['comments']);
-      hide($content['links']);
-      print render($content);
-    ?>
   </div>
 
   <?php print render($content['links']); ?>
