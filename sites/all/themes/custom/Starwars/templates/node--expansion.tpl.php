@@ -98,18 +98,16 @@
 
   <div class="content"<?php print $content_attributes; ?>>
 
-    <div class='col-md-6'>
+    <div class='col-md-6 imgwrapper'>
       <?php
       print render($content['body']);
       print render($content['field_users']);
-      print render($content['field_faction']);
+      print render($content['field_details']);
       ?>
     </div>
 
     <div class='col-md-6'>
-      <?php
-      print render($content['field_ship_image']);
-      ?>
+      <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a>
     </div>
 
     <?php

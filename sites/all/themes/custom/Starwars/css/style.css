@@ -22,3 +22,11 @@ a:hover {
 .views-css-tables-table--thead {
   padding-bottom: 4%;
 }
+
+.imgwrapper {
+  width: 80%;
+}
+
+a.wiki-link {
+  display: none;
+}
