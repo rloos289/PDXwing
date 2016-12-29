@@ -35,14 +35,30 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
-  <div class="info col-md-8">
-    <?php
-    print render($user_profile['field_ships']);
-    print render($user_profile['field_preferred_faction']);
-    print render($user_profile['field_builds']);
-     ?>
-  </div>
   <div class="avatar col-md-4">
-    <?php print render($user_profile['user_picture']); ?>
+    <?php
+    print render($user_profile['user_picture']);
+    ?>
+  </div>
+  <div class="col-md-8">
+    <div class="profile_info">
+      <?php
+      print render($user_profile['field_preferred_faction']);
+      print render($user_profile['field_favorite_ship']);
+      print render($user_profile['field_favorite_pilot']);
+       ?>
+    </div>
+    <div class="ships_builds">
+      <div class="col-md-6 ships">
+        <?php
+        print render($user_profile['field_ships']);
+        ?>
+      </div>
+      <div class="col-md-6 builds">
+        <?php
+        print render($user_profile['field_builds']);
+        ?>
+      </div>
+    </div>
   </div>
 </div>

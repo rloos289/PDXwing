@@ -31,7 +31,16 @@ a.wiki-link {
   display: none;
 }
 
-.owned_by {
-  background-color: #b5afaf;
+.owned_by, .ships, .builds, .profile_info {
   text-align: center;
+  background: rgba(255,255,255,0.5);
+  margin: 3%;
+  padding: 1%;
+}
+
+.ships_builds {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
