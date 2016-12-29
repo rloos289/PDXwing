@@ -31,10 +31,22 @@ a.wiki-link {
   display: none;
 }
 
-.owned_by, .ships, .builds, .profile_info {
+.ships, .builds, .profile_info {
   text-align: center;
   background: rgba(255,255,255,0.5);
   margin: 3%;
+  padding: 1%;
+}
+
+.node-article, .field-type-text-with-summary, .view-all-ships {
+  background: rgba(255,255,255,0.5);
+  margin: 3%;
+  padding: 3%;
+}
+
+.owned_by {
+  text-align: center;
+  background: rgba(255,255,255,0.5);
   padding: 1%;
 }
 
@@ -43,4 +55,8 @@ a.wiki-link {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+}
+
+.form-item-field-builds-und-0-title, .form-item-field-builds-und-0-url {
+  color: black;
 }

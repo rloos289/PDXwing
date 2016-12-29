@@ -105,11 +105,9 @@
       <?php if ($page['highlighted']): ?><div id="highlighted" class='col-md-12'><?php print render($page['highlighted']); ?></div><?php endif; ?>
 
 
-              <?php if ($page['sidebar_first']): ?>
-                <div id="sidebar-first" class="column sidebar col-md-2"><div class="section">
+                <div id="sidebar-first" class="column sidebar col-md-1"><div class="section">
                   <?php print render($page['sidebar_first']); ?>
                 </div></div> <!-- /.section, /#sidebar-first -->
-              <?php endif; ?>
 
       <div id="content" class="column col-md-8"><div class="section">
         <a id="main-content"></a>
