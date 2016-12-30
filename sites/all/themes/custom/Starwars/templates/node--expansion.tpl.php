@@ -98,15 +98,16 @@
 
   <div class="content"<?php print $content_attributes; ?>>
     <div class="container">
+      <?php if ($content['field_users']): ?>
       <div class='col-md-6 owned_by'>
         <?php
         print render($content['field_users']);
         ?>
       </div>
+    <?php endif; ?>
       <div class='col-md-6'>
         <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a>
       </div>
-
       <?php
         // We hide the comments and links now so that we can render them later.
         hide($content['comments']);
