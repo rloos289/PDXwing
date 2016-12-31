@@ -99,7 +99,7 @@
   <div class="content"<?php print $content_attributes; ?>>
     <div class="container">
       <div class='col-md-6 owned_by'>
-        <?php if ($content['field_users']):
+        <?php if ($content['field_users']): 
           print render($content['field_users']);
         ?>
       <?php else: ?>
