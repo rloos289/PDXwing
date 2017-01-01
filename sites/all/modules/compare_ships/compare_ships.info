@@ -1,0 +1,5 @@
+name = Compare Ships
+description = Compare ship cards
+package = custom modules
+core = 7.x
+files[] = compare_ships.module
