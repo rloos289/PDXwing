@@ -32,7 +32,7 @@ a.wiki-link {
 }
 
 .ships, .builds, .profile_info {
-  text-align: center;
+  /*text-align: center;*/
   background: rgba(255,255,255,0.5);
   margin: 3%;
   padding: 1%;
@@ -57,6 +57,6 @@ a.wiki-link {
   align-items: stretch;
 }
 
-.form-item-field-builds-und-0-title, .form-item-field-builds-und-0-url {
+.form-item-field-builds-und-0-title, .form-item-field-builds-und-0-url, .link-field-subrow {
   color: black;
 }
