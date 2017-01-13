@@ -60,3 +60,15 @@ a.wiki-link {
 .form-item-field-builds-und-0-title, .form-item-field-builds-und-0-url, .link-field-subrow {
   color: black;
 }
+
+.empire {
+  background-color: #2A3778;
+}
+
+.rebel {
+  background-color: #641618;
+}
+
+.scum {
+  background-color: #AE8714;
+}
