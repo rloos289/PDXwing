@@ -1,0 +1,139 @@
+<?php
+
+function cipher_menu() {
+    $items['cipher'] = array(
+        'title' => 'Cipher',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('cipher_form', 'random_button'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['cipher_success_page'] = array(
+        'title' => 'Success!',
+        'page callback' => 'cipher_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function cipher_form() {
+    $form['phrase'] = array(
+        '#title' => 'phrase',
+        '#type' => 'textfield',
+        '#description' => t('Please enter the phrase you want to use.'),
+        '#element_validate' => array('element_validate_characters'),
+        '#required' => TRUE,
+    );
+    $form['direction'] = array(
+        '#title' => 'direction',
+        '#type' => 'textfield',
+        '#description' => t('Left or right?'),
+        '#element_validate' => array('element_validate_direction'),
+        '#required' => TRUE,
+    );
+
+    $form['shift_value'] = array(
+        '#title' => 'shift value',
+        '#type' => 'textfield',
+        '#description' => t('pick a number'),
+        '#element_validate' => array('element_validate_integer_positive'),
+        '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'encode your phrase',
+        '#submit' => array('cipher_form_submit'),
+    );
+
+    $form['alt_button'] = array(
+        '#type' => 'submit',
+        '#value' => 'decode your phrase',
+        '#submit' => array('decode_form_submit'),
+    );
+    return $form;
+}
+
+function element_validate_characters($element) {
+    if (preg_match("/[^a-zA-Z0-9\/_.;,!?'|+ -]/", $element['#value'])) {
+        form_error($element, t('Please do not use any special characters that are not punctuation'));
+    }
+}
+
+function element_validate_direction($element) {
+    $direction_check = trim(strtolower($element['#value']));
+
+    if ($direction_check == 'right' || $direction_check == 'left') {
+        return;
+    } else {
+        form_error($element, t('Please enter either "left" or "right"'));
+    }
+}
+
+function change_letter($letter, $direction, $shift_value, $dictionary) {
+
+    //code is redundant here but helps with readability
+    if ($direction == "right") {
+        $dictionary = $dictionary;
+    } elseif ($direction == "left") {
+        $dictionary = array_reverse($dictionary);
+    }
+    $dictionary_value = (array_search($letter, $dictionary)) + $shift_value;
+
+    //if number is 26, number is actually 0 because of offset inherent to arrays
+    if ($dictionary_value == 26) {
+        $dictionary_value = 0;
+    }
+    //if number is bigger than 26
+    if ($dictionary_value > 26) {
+        $dictionary_value = $dictionary_value % 26;
+    }
+    $new_letter = $dictionary[$dictionary_value];
+    return $new_letter;
+}
+
+function translate_phrase($phrase, $direction, $shift_value) {
+    $dictionary = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+
+    $phrase = str_split(strtolower($phrase));
+    $result = array();
+
+    for ($i = 0; $i <= count($phrase) - 1 ; $i++) {
+        if ((in_array($phrase[$i], $dictionary))) {
+            $new_letter = change_letter($phrase[$i], $direction, $shift_value, $dictionary);
+            array_push($result, $new_letter);
+        } else {
+            array_push($result, $phrase[$i]);
+        }
+    }
+
+    return join($result);
+}
+
+function cipher_form_submit($form, &$form_state) {
+    $phrase = $form_state['values']['phrase'];
+    $direction = $form_state['values']['direction'];
+    $shift_value = $form_state['values']['shift_value'];
+    $_SESSION['encoded_phrase'] = translate_phrase($phrase, $direction, $shift_value);
+    $form_state['redirect'] = 'cipher_success_page';
+}
+
+function decode_form_submit($form, &$form_state) {
+    $phrase = $form_state['values']['phrase'];
+    if ($form_state['values']['direction'] == 'left') {
+        $direction = 'right';
+    } elseif ($form_state['values']['direction'] == 'right') {
+        $direction = 'left';
+    };
+    $shift_value = $form_state['values']['shift_value'];
+
+    $_SESSION['encoded_phrase'] = translate_phrase($phrase, $direction, $shift_value);
+
+    $form_state['redirect'] = 'cipher_success_page';
+    }
+
+function cipher_success() {
+    $final = $_SESSION['encoded_phrase'];
+    return '<div class="result"> Your phrase is ' . '<pre>' . $final . '</pre></div>';
+}
