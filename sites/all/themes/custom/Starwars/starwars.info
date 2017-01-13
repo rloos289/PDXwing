@@ -1,4 +1,4 @@
-name = Starwars
+name = starwars
 engine = phptemplate
 description = A custom template based on star wars.
 core = 7.x
