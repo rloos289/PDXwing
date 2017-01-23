@@ -22,7 +22,7 @@
  *   a string within the variable $classes.
  *
  * @see template_preprocess()
- * @see template_preprocess_entity()
+ * @see template_preprocess_entity() 
  * @see template_process()
  */
 ?>
