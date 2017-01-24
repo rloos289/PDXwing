@@ -78,7 +78,7 @@
 
       <?php if ($site_name || $site_slogan): ?>
         <div id="name-and-slogan">
-           <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><img src=/sites/all/themes/custom/Starwars/images/pdxwing-logo.png></a>
+           <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><img src=/sites/all/themes/custom/starwars/images/pdxwing-logo.png></a>
           <?php if ($site_slogan): ?>
             <div id="site-slogan"><?php print $site_slogan; ?></div>
           <?php endif; ?>

@@ -56,7 +56,7 @@
       </div>
       <div class="col-md-6 builds">
         <?php
-        print render($user_profile['field_builds']);
+        print render($user_profile['field_builds_paragraph_']);
         ?>
       </div>
     </div>

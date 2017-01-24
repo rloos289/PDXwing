@@ -99,13 +99,14 @@
   <div class="content"<?php print $content_attributes; ?>>
     <div class="container">
       <div class='col-md-6 owned_by'>
-        <?php if ($content['field_users']): 
+        <?php if ($content['field_users']):
           print render($content['field_users']);
         ?>
       <?php else: ?>
         <p> No one has this ship yet</p>
       <?php endif; ?>
       </div>
+
       <div class='col-md-6'>
         <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a>
       </div>

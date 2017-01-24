@@ -11,9 +11,7 @@ a:visited {
   color: white;
 }
 
-a:hover {
-  color: #C4D846;
-}
+a:hover {color: #93278f;}
 
 .section {
   color: white;
@@ -59,4 +57,22 @@ a.wiki-link {
 
 .form-item-field-builds-und-0-title, .form-item-field-builds-und-0-url, .link-field-subrow {
   color: black;
+}
+
+.empire {
+  background-color: #2A3778;
+  border-radius: 25px;
+  padding: 2%;
+}
+
+.rebel {
+  background-color: #641618;
+  border-radius: 25px;
+  padding: 2%;
+}
+
+.scum {
+  background-color: #AE8714;
+  border-radius: 25px;
+  padding: 2%;
 }
