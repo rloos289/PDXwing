@@ -98,7 +98,7 @@
 
   <div class="content"<?php print $content_attributes; ?>>
     <div class="container">
-      <div class='col-md-3 owned_by'>
+      <div class='col-md-6 owned_by'>
         <?php if ($content['field_users']):
           print render($content['field_users']);
         ?>
@@ -106,18 +106,9 @@
         <p> No one has this ship yet</p>
       <?php endif; ?>
       </div>
-      <div class='col-md-2'>
-        <?php
-        print render($content['field_attack']);
-        print render($content['field_evade']);
-        print render($content['field_shields']);
-        print render($content['field_hull']);
-        print render($content['field_actions']);
-        print render($content['field_faction_taxonomy_']);
-        ?>
-      </div>
-      <div class='col-md-5'>
-        <!-- <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a> -->
+
+      <div class='col-md-6'>
+        <a href="<?php print $content['field_details']['#object']->field_details['und'][0]['url']; ?>"><?php print render($content['field_ship_image']);?></a>
       </div>
       <?php
         // We hide the comments and links now so that we can render them later.
