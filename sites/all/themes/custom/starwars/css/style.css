@@ -1,0 +1,78 @@
+body {
+    background-image: url(../images/background.jpg);
+    color: white;
+}
+
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {color: #93278f;}
+
+.section {
+  color: white;
+}
+
+.views-css-tables-table--thead {
+  padding-bottom: 4%;
+}
+
+.imgwrapper {
+  width: 80%;
+}
+
+a.wiki-link {
+  display: none;
+}
+
+.ships, .builds, .profile_info {
+  /*text-align: center;*/
+  background: rgba(255,255,255,0.5);
+  margin: 3%;
+  padding: 1%;
+}
+
+.node-article, .field-type-text-with-summary, .view-all-ships {
+  background: rgba(255,255,255,0.5);
+  margin: 3%;
+  padding: 3%;
+}
+
+.owned_by {
+  text-align: center;
+  background: rgba(255,255,255,0.5);
+  padding: 1%;
+}
+
+.ships_builds {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.form-item-field-builds-und-0-title, .form-item-field-builds-und-0-url, .link-field-subrow {
+  color: black;
+}
+
+.empire {
+  background-color: #2A3778;
+  border-radius: 25px;
+  padding: 2%;
+}
+
+.rebel {
+  background-color: #641618;
+  border-radius: 25px;
+  padding: 2%;
+}
+
+.scum {
+  background-color: #AE8714;
+  border-radius: 25px;
+  padding: 2%;
+}
