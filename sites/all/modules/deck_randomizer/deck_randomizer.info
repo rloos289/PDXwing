@@ -1,0 +1,6 @@
+name = Deck Randomizer
+description = Allows users to generate random decks for players
+package = custom modules
+core = 7.x
+files[] = deck_randomizer.module
+files[] = test.txt

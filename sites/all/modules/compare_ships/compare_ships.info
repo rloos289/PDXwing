@@ -1,0 +1,5 @@
+name = Compare Ships
+description = allows users to compare the stats of various ships
+package = custom modules
+core = 7.x
+files[] = compare_ships.module

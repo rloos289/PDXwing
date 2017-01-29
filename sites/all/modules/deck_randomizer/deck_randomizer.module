@@ -1,0 +1,135 @@
+<?php
+
+function deck_randomizer_menu() {
+    $items['deck_randomizer'] = array(
+        'title' => 'Deck Randomizer',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('deck_randomizer_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['deck_randomizer_results'] = array(
+        'title' => 'Decks',
+        'page callback' => 'deck_randomizer_results',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function deck_randomizer_form() {
+    $form['player_number'] = array(
+        '#title' => 'How many people are playing?',
+        '#type' => 'radios',
+        '#options' => array('2'=>('2'), '3'=>('3'), '4'=>('4')),
+        '#required' => TRUE,
+    );
+    $form['expansions'] = array(
+        '#title' => 'Which Expansions do you want to include?',
+        '#type' => 'checkboxes',
+        '#options' => array('1' => ('Base Set'), 'Awesome Level 9000', 'The Obligatory Cthulu Expansion', 'The Science Fiction Double Feature', 'The Big Geeky Box', 'Monster Smash', 'Pretty Pretty Smashup', 'Munchkin Smash Up', 'It\'s Your Fault', 'Cease & Desist'),
+        //had to set 'base set' as 1 because 0 always shows up in the search array
+        '#required' => TRUE,
+        // '#element_validate' => array('element_validate_enough_decks'),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Randomize!',
+        '#submit' => array('deck_randomizer_form_submit'),
+    );
+
+    return $form;
+}
+//
+// function element_validate_enough_decks($element) {
+//   if ($form_state['values']['player_number'])
+//
+//         echo '<pre>';
+//     print_r($form_state['values']['player_number']);
+//     echo '</pre>';
+//     exit;
+//
+//     form_error($element, t('Please do not use any special characters that are not punctuation'));
+//
+// }
+
+function deck_randomizer_form_submit($form, &$form_state) {
+    $players = $form_state['values']['player_number'];
+    $expansions = $form_state['values']['expansions'];
+    $deck_pool = array();
+    $player_decks = array();
+
+    if (in_array('1', $expansions)) {
+        array_push($deck_pool, 'Pirates', 'Aliens', 'Tricksters', 'Ninjas', 'Zombies', 'Robots', 'Wizards', 'Dinosaurs');
+    }
+
+    if (in_array('2', $expansions)) {
+        array_push($deck_pool, 'Plants', 'Ghosts', 'Steampunks', 'Bear Cavalry');
+    }
+
+    if (in_array('3', $expansions)) {
+        array_push($deck_pool, 'Innsmouth', 'Miskatonic University', 'Elder Things', 'Minions of Cthulu');
+    }
+
+    if (in_array('4', $expansions)) {
+        array_push($deck_pool, 'Shapeshifters', 'Time Travelers', 'Spies', 'Cyborg Apes');
+    }
+
+    if (in_array('5', $expansions)) {
+        array_push($deck_pool, 'Geeks');
+    }
+
+    if (in_array('6', $expansions)) {
+        array_push($deck_pool, 'Vampires', 'Werewolves', 'Mad Scientists', 'Giant Ants');
+    }
+
+    if (in_array('7', $expansions)) {
+        array_push($deck_pool, 'Fairies', 'Princesses', 'Mythic Horses', 'Kitty Cats');
+    }
+
+    if (in_array('8', $expansions)) {
+        array_push($deck_pool, 'Elves', 'Warriors', 'Thieves', 'Clerics', 'Orcs', 'Dwarves', 'Mages', 'Halflings');
+    }
+
+    if (in_array("9", $expansions)) {
+        array_push($deck_pool, 'Sharks', 'Superheroes', 'Mythic Greeks', 'Dragons', 'Tornadoes');
+    }
+
+    if (in_array("10", $expansions)) {
+        array_push($deck_pool, 'Changerbots', 'Star Roamers', 'Ignobles', 'Astroknights');
+    }
+
+    $final_decks = array();
+    for ($i=0; $i < ($players * 2); $i++) {
+        $random_index = mt_rand(0,(count($deck_pool)-1)); //get random number
+        $deck = implode(' ',array_splice($deck_pool, $random_index, 1)); //take a random deck out, set as deck
+        array_push($final_decks, $deck);
+    }
+
+    if(count($final_decks) == 4) {
+        $player_1 = "Player 1: " . $final_decks[0] . ' and ' . $final_decks[1];
+        $player_2 = "Player 2: " . $final_decks[2] . ' and ' . $final_decks[3];
+            $final_list = array($player_1, $player_2);
+    } elseif(count($final_decks) == 6) {
+        $player_1 = "Player 1: " . $final_decks[0] . ' and ' . $final_decks[1];
+        $player_2 = "Player 2: " . $final_decks[2] . ' and ' . $final_decks[3];
+        $player_3 = "Player 3: " . $final_decks[4] . ' and ' . $final_decks[5];
+            $final_list = array($player_1, $player_2, $player_3);
+    } elseif(count($final_decks) == 8) {
+        $player_1 = "Player 1: " . $final_decks[0] . ' and ' . $final_decks[1];
+        $player_2 = "Player 2: " . $final_decks[2] . ' and ' . $final_decks[3];
+        $player_3 = "Player 3: " . $final_decks[4] . ' and ' . $final_decks[5];
+        $player_4 = "Player 4: " . $final_decks[6] . ' and ' . $final_decks[7];
+            $final_list = array($player_1, $player_2, $player_3, $player_4);
+    }
+
+    $_SESSION['deck_results'] = implode('<br>', $final_list);
+
+    $form_state['redirect'] = 'deck_randomizer_results';
+}
+
+function deck_randomizer_results() {
+    $final = $_SESSION['deck_results'];
+    return $final;
+}
