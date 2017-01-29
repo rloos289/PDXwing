@@ -1,5 +1,0 @@
-name = Cipher
-description = encode your sentences
-package = custom modules
-core = 7.x
-files[] = cipher.module
