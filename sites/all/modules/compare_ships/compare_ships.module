@@ -1,5 +1,17 @@
 <?php
 
+function get_ship_list() {
+    $shiplist = array();
+    $result = db_query("SELECT * FROM node WHERE type = 'expansion'")->fetchCol();
+    foreach($result as $shipname)
+    {
+        $node = node_load($shipname);
+        $title = $node->title;
+        array_push($shiplist, $title);
+    }
+    return $shiplist;
+}
+
 function compare_ships_menu() {
     $items['compare_ships'] = array(
         'title' => 'Compare Ships',
@@ -7,6 +19,12 @@ function compare_ships_menu() {
         'page arguments' => array('compare_ships_form'),
         'access callback' => TRUE,
         'type' => MENU_NORMAL_ITEM,
+    );
+    $items['compare_ships_results'] = array(
+        'title' => 'Ships',
+        'page callback' => 'compare_ships_results',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
     );
     return $items;
 }
@@ -16,13 +34,23 @@ function compare_ships_form() {
         '#title' => 'Ship 1',
         '#type' => 'select',
         '#description' => 'please choose a ship to compare',
-        '#options' => $shipChoices = array(t('--- SELECT ---'), t('X-Wing'), t('A-Wing'), t('B-Wing')),
+        '#options' => $shipChoices = get_ship_list(),
     );
     $form['ship2'] = array(
         '#title' => 'Ship 2',
         '#type' => 'select',
         '#description' => 'please choose a ship to compare',
-        '#options' => $shipChoices = array(t('--- SELECT ---'), t('Tie-Fighter'), t('Tie Bomber'), t('Tie-Defender')),
+        '#options' => $shipChoices = get_ship_list(),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'submit',
+        '#submit' => array('compare_ships_form_submit'),
     );
     return $form;
+}
+
+function compare_ships_form_submit($form, &$from_state) {
+
 }
