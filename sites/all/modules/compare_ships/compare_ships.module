@@ -1,16 +1,28 @@
 <?php
 
+function array_push_assoc($array, $key, $value){
+ $array[$key] = $value;
+ return $array;
+}
+
 function get_ship_list() {
     $shiplist = array();
     $result = db_query("SELECT * FROM node WHERE type = 'expansion'")->fetchCol();
     foreach($result as $shipname)
     {
-        $node = node_load($shipname);
-        $title = $node->title;
-        array_push($shiplist, $title);
+        $nodeid = node_load($shipname);
+        $title = $nodeid->title;
+        $image = field_get_items('node',$nodeid,'field_ship_image');
+        $image = $image[0]['filename'];
+        $shiplist[$image] = $title;
+        // array_push_assoc ($shiplist, $title, $image);
     }
     return $shiplist;
 }
+
+// $node = node_load($nid);
+// $image = field_get_items('node', $node, 'field_image');
+// $output = field_view_value('node', $node, 'field_image', $image[0]);
 
 function compare_ships_menu() {
     $items['compare_ships'] = array(
@@ -36,21 +48,29 @@ function compare_ships_form() {
         '#description' => 'please choose a ship to compare',
         '#options' => $shipChoices = get_ship_list(),
     );
-    $form['ship2'] = array(
-        '#title' => 'Ship 2',
-        '#type' => 'select',
-        '#description' => 'please choose a ship to compare',
-        '#options' => $shipChoices = get_ship_list(),
-    );
-
     $form['submit'] = array(
         '#type' => 'submit',
         '#value' => 'submit',
-        '#submit' => array('compare_ships_form_submit'),
+        // '#ajax' => array(
+        //   '#callback' => 'compare_ships_form',
+        //   '#wrapper' => 'wrapper',
+        //    'method' => 'replace',
+        //    'effect' => 'fade',
+        // ),
     );
     return $form;
 }
 
-function compare_ships_form_submit($form, &$from_state) {
+function compare_ships_form_submit($form, &$form_state) {
+    $ship_name = $form_state['values']['ship1'];
+    echo '<pre>';
+    print_r(get_ship_list());
+    echo '</pre>';
+    exit;
+    // $form_state['redirect'] = 'compare_ships_results';
+}
 
+function compare_ships_results()
+{
+    return 'test';
 }
