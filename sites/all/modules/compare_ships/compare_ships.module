@@ -1,10 +1,5 @@
 <?php
 
-function array_push_assoc($array, $key, $value){
- $array[$key] = $value;
- return $array;
-}
-
 function get_ship_list() {
     $shiplist = array();
     $result = db_query("SELECT * FROM node WHERE type = 'expansion'")->fetchCol();
@@ -15,14 +10,14 @@ function get_ship_list() {
         $image = field_get_items('node',$nodeid,'field_ship_image');
         $image = $image[0]['filename'];
         $shiplist[$image] = $title;
-        // array_push_assoc ($shiplist, $title, $image);
     }
+    // echo '<pre>';
+    // print_r($shiplist);
+    // echo '</pre>';
+    // exit;
+
     return $shiplist;
 }
-
-// $node = node_load($nid);
-// $image = field_get_items('node', $node, 'field_image');
-// $output = field_view_value('node', $node, 'field_image', $image[0]);
 
 function compare_ships_menu() {
     $items['compare_ships'] = array(
@@ -48,29 +43,33 @@ function compare_ships_form() {
         '#description' => 'please choose a ship to compare',
         '#options' => $shipChoices = get_ship_list(),
     );
+    $form['ship2'] = array(
+        '#title' => 'Ship 1',
+        '#type' => 'select',
+        '#description' => 'please choose a ship to compare',
+        '#options' => $shipChoices = get_ship_list(),
+    );
     $form['submit'] = array(
         '#type' => 'submit',
         '#value' => 'submit',
-        // '#ajax' => array(
-        //   '#callback' => 'compare_ships_form',
-        //   '#wrapper' => 'wrapper',
-        //    'method' => 'replace',
-        //    'effect' => 'fade',
-        // ),
     );
+
+    if (!empty($form_state['values']['ship1'])) {
+        $form['replace_ship_card']['#description'] = t('testing 123');
+    }
     return $form;
 }
 
 function compare_ships_form_submit($form, &$form_state) {
-    $ship_name = $form_state['values']['ship1'];
-    echo '<pre>';
-    print_r(get_ship_list());
-    echo '</pre>';
-    exit;
-    // $form_state['redirect'] = 'compare_ships_results';
+    $_SESSION['ship image1'] = $form_state['values']['ship1'];
+    $_SESSION['ship image2'] = $form_state['values']['ship2'];
+    $form_state['redirect'] = 'compare_ships_results';
 }
 
 function compare_ships_results()
 {
-    return 'test';
+    $src1 = 'sites/default/files/' . $_SESSION['ship image1'];
+    $src2 = 'sites/default/files/' . $_SESSION['ship image2'];
+    return '<div class="col-sm-6 ship_1"> <img typeof="foaf:Image" src=' . $src1 . ' width="354" height="500"></div>' .
+           '<div class="col-sm-6 ship_2"> <img typeof="foaf:Image" src=' . $src2 . ' width="354" height="500"></div>';
 }
